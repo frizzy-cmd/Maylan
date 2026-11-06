@@ -1,4 +1,5 @@
 .wrangler/
+# contrib :)
 node_modules/
 .env
 admpw.txt
