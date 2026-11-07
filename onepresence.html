@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="title" content="OnePresence - OneShot Discord RPC expansion mod">
+		<meta name="description" content="OnePresence is a OneShot mod that expands the Discord RPC functionality whilst playing OneShot.">
+		<meta name="keywords" content="oneshot, OnePresence, xscripts.rxdata, modding, rpg maker xp, debug tools, map ids, item ids, discord rpc, discord oneshot, discord mod oneshot, oneshot mod, discord rpc mod, discord rpc mod oneshot, oneshot">
+		<meta name="language" content="EN">
+		<meta name="owner" content="nightregion">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#5e1138">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<!-- OpenGraph/dc Metatags -->
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="OnePresence by Nightregion">
+		<meta property="og:title" content="OnePresence - OneShot Discord RPC expansion mod">
+		<meta property="og:description" content="OnePresence is a OneShot mod that expands the Discord RPC functionality whilst playing OneShot.">
+		<meta property="og:url" content="https://nightregion.teaa.workers.dev/onepresence">
+		<meta property="og:image" content="https://nightregion.teaa.workers.dev/static/img/icon.ico">
+
+		<link rel="icon" type="image/x-icon" href="static/onepresence.content/icon.ico">
+		<link rel="stylesheet" href="static/styles.css">
+		<script src="static/js/calamus-toolkit.js" defer></script>
+		<script src="static/js/theme-switcher.js"></script>
+		<script src="static/js/site-announcement.js" defer></script>
+		<script src="static/js/alert-sound.js"></script>
+		<script src="static/js/secret.js" defer></script>
+		<title>OnePresence - Main</title>
+
+		<style>
+			#box, #message {
+				width: 780px;
+				max-width: 92%;
+				box-sizing: border-box;
+			}
+
+			.badge-container {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				justify-content: center;
+				margin: 16px 0;
+			}
+			.badge {
+				background: #3a1548;
+				border: 1px solid #fa9040;
+				color: #f0c0f0;
+				padding: 4px 10px;
+				font-size: 11pt;
+				border-radius: 3px;
+			}
+
+			.btn-download {
+				display: inline-block;
+				background: #ba6a30;
+				color: #ffffff !important;
+				padding: 12px 28px;
+				border-bottom: 6px solid #603010;
+				text-decoration: none;
+				font-size: 16pt;
+				font-weight: bold;
+				margin: 16px 0;
+				text-align: center;
+			}
+			.btn-download:hover {
+				background: #d87a38;
+			}
+			.btn-download:active {
+				border-bottom-width: 2px;
+				transform: translateY(4px);
+			}
+
+			.file-explorer {
+				border: 2px solid #5a207f;
+				background: rgba(18, 6, 28, 0.95);
+				margin-top: 28px;
+				border-radius: 6px;
+				overflow: hidden;
+				box-shadow: 0 0 12px rgba(90, 32, 127, 0.4);
+			}
+			.file-explorer-header {
+				background: #2d0b3a;
+				padding: 10px 18px;
+				color: #fa9040;
+				font-weight: bold;
+				font-size: 16pt;
+				border-bottom: 2px solid #5a207f;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.search-bar {
+				padding: 5px 10px;
+				border: 1px solid #5a207f;
+				background: #12031c;
+				color: #f0c0f0;
+				font-family: Terminus, monospace;
+				font-size: 11pt;
+				width: 180px;
+				border-radius: 3px;
+				outline: none;
+				transition: border-color 0.2s, box-shadow 0.2s;
+			}
+			.search-bar::placeholder {
+				color: #8a50a0;
+			}
+			.search-bar:focus {
+				border-color: #fa9040;
+				box-shadow: 0 0 6px rgba(250, 144, 64, 0.5);
+			}
+
+			.file-table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.file-table th, .file-table td {
+				padding: 10px 14px;
+				text-align: left;
+				border-bottom: 1px solid #2a0a38;
+				font-size: 13pt;
+				vertical-align: middle;
+			}
+			.file-table th {
+				background: #22072e;
+				color: #fa9040;
+				font-weight: normal;
+				font-size: 14pt;
+				border-bottom: 2px solid #5a207f;
+			}
+			.file-table tr:hover {
+				background: rgba(90, 32, 127, 0.25);
+			}
+			.file-table code {
+				color: #ffffff;
+				font-family: Terminus, monospace;
+				background: transparent;
+				padding: 0;
+			}
+
+			.file-table td:nth-child(1) {
+				width: 48%;
+				word-break: break-word;
+			}
+			.file-table td:nth-child(2) {
+				width: 22%;
+				white-space: nowrap;
+				color: #c0a0c0;
+			}
+			.file-table td:nth-child(3) {
+				width: 15%;
+				white-space: nowrap;
+				color: #a080a0;
+			}
+			.file-table td:nth-child(4) {
+				width: 15%;
+				white-space: nowrap;
+				text-align: right;
+			}
+
+			.folder-row {
+				background: rgba(45, 11, 58, 0.6);
+				color: #fa9040;
+				font-weight: bold;
+			}
+			.folder-row td {
+				border-top: 1px solid #5a207f;
+				border-bottom: 1px solid #5a207f;
+				padding: 8px 14px;
+			}
+
+			.action-link {
+				display: inline-block;
+				color: #f060f0;
+				text-decoration: none;
+				font-size: 12pt;
+				padding: 2px 8px;
+				background: rgba(240, 96, 240, 0.08);
+				border: 1px solid rgba(240, 96, 240, 0.3);
+				border-radius: 3px;
+			}
+			.action-link:hover {
+				background: rgba(240, 96, 240, 0.25);
+				border-color: #f060f0;
+				text-decoration: none;
+			}
+
+			.readme-box {
+				background: rgba(18, 6, 28, 0.95);
+				border: 2px solid #5a207f;
+				padding: 24px 28px;
+				margin-top: 32px;
+				color: #e0d0e0;
+				line-height: 1.5;
+				border-radius: 6px;
+				box-shadow: 0 0 12px rgba(90, 32, 127, 0.3);
+			}
+			.readme-box h2, .readme-box h3 {
+				text-align: left;
+				margin-top: 20px;
+				margin-bottom: 10px;
+			}
+			.readme-box ul, .readme-box ol {
+				padding-left: 24px;
+			}
+			.readme-box code {
+				background: #12031c;
+				border: 1px solid #5a207f;
+				padding: 2px 6px;
+				color: #fa9040;
+			}
+			.readme-box pre {
+				background: #12031c;
+				border: 1px solid #5a207f;
+				padding: 12px;
+				overflow-x: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<a href="index.html" style="text-decoration: none;">
+				<img id="logo" src="static/img/logo.png" alt="u only have one shot.." title="Go to Homepage">
+			</a>
+			<div id="subtitle">OnePresence</div>
+		</div>
+
+		<div id="message">
+			<h3>What is OnePresence?</h3>
+			<strong>OnePresence</strong> is a OneShot mod. Instead of a boring ol' Discord Rich Presence status that just says OneShot, this mod expands it by a few!
+			<br><br>
+			For maps, it says that you are either exploring the barrens, glen, or refuge (surface & ground)! 
+			<br><br>
+			Dialogues also work! They're a bit finicky due to Discord rate limiting, but it works (mostly) 
+			<br><br>
+			This mod <strong>REQUIRES</strong> a external app inorder to use. That app is also open-source, don't worry.
+
+
+			<div class="badge-container">
+				<span class="badge">Version: v0.0.1-BT [Beta]</span>
+				<span class="badge">Developers: Nightregion, OTC</span>
+				<span class="badge">Platforms: Windows</span>
+                <span class="badge">License: GPL-3.0</span>
+			</div>
+<!-- 
+			<br>
+			<h3 style="color: #ff4444; margin: 12px 0;">!! Warning !!</h3> -->
+			
+		</div>
+
+		<div id="box">
+			<div style="text-align: center;">
+				<h3>Download OnePresence</h3>
+				<a href="https://codeberg.org/kipkat/onepresence/releases" class="btn-download">
+					Download from Codeberg
+				</a>
+			</div>
+
+			<div class="file-explorer">
+				<div class="file-explorer-header">
+					<span>Files</span>
+					<input type="text" id="fileSearch" class="search-bar" placeholder="Search..">
+				</div>
+				<table class="file-table" id="fileTable">
+					<thead>
+						<tr>
+							<th>File / Directory</th>
+							<th>Type</th>
+							<th>Size</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- main file -->
+						<tr>
+							<td><code>&nbsp;&nbsp;📜 xScripts.rxdata</code></td>
+							<td>Compiled RGSS</td>
+							<td>X</td>
+							<td><a href="https://codeberg.org/kipkat/onepresence/releases" class="action-link">Download</a></td>
+						</tr>
+						<tr>
+							<td><code>&nbsp;&nbsp;📜 OnePresence_RPC_Handler</code></td>
+							<td>Executable</td>
+							<td>X</td>
+							<td><a href="https://codeberg.org/kipkat/onepresence/releases" class="action-link">Download</a></td>
+						</tr>
+						<tr>
+							<td><code>&nbsp;&nbsp;📜 110 - OnePresence.rb</code></td>
+							<td>Ruby</td>
+							<td>X</td>
+							<td><a href="https://codeberg.org/kipkat/onepresence/raw/branch/main/110%20-%20OnePresence.rb" class="action-link">View raw</a></td>
+						</tr>
+
+                        <!-- Emojis... since i dont wanna bother with pngs. looks sloppy but fuck it! -->
+
+						<!-- dir 1 -->
+						<tr class="folder-row">
+							<td colspan="4">📁 OnePresence RPC Handler</td>
+						</tr>
+                        <tr class="file-item">
+							<td>&nbsp;&nbsp;📄 <code>op.py</code></td>
+							<td>Python</td>
+							<td>18.7 KB</td>
+							<td><a href="static/onepresence.content/op.py" target="_blank" class="action-link">View raw</a></td>
+						</tr>
+						<tr class="file-item">
+							<td>&nbsp;&nbsp;🖼️ <code>icon.ico</code></td>
+							<td>Icon</td>
+							<td>1.6 KB</td>
+							<td><a href="static/onepresence.content/icon.ico" target="_blank" class="action-link">View</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- README -->
+			<div class="readme-box">
+				<h3>OneShot installation</h3>
+				<li><strong>Make sure to backup your original <code>xScripts.rxdata</code> file and the <code>save.dat</code> file wherever OneShot stores your save files!</strong>
+				<li>Download the <code>xScripts.rxdata</code> file from the Codeberg repository.</li>
+				<li>Navigate to your OneShot game directory. Paths are listed below this installation guide.</li>
+				<li>Move your unmodified <code>xScripts.rxdata</code> file out the <code>Data</code> folder.</li>
+				<li>Drop the OnePresence version of the <code>xScripts.rxdata</code> file into the <code>Data</code> folder.</li>
+
+				<h3>OnePresence RPC Handler installation</h3>
+				<li>Download the <code>OnePresence_RPC_Handler.exe</code> file from the Codeberg repository.</li>
+				<li>Once downloaded, run it!</li>
+				<li>Make sure OneShot is already running, if not, run it.</li>
+				<Li>If OneShot is running, click <code>Enable RPC</code>and enjoy!</Li>
+				<li><i>Adjust the path to the .txt file for OnePresence if necessary.</i></li>
+				<li><i>You can manually edit the details & state if necessary.</i></li>
+
+				<h3>Paths to OneShot</h3>
+				<pre><code>Windows: C:\Program Files (x86)\Steam\steamapps\common\OneShot\Data
+ Linux:   ~/.steam/steam/steamapps/common/OneShot/Data
+ macOS:   ~/Library/Application Support/Steam/steamapps/common/OneShot/Data</code></pre>
+
+				<h3>Troubleshooting</h3>
+				<p><strong>Q: My game crashes immediately upon launch.</strong><br>
+				A: Make sure you have replaced your unmodified xScripts.rxdata with the OnePresence xScripts.rxdata version, Or, if in some cases, OneShot pushed an update that broke the mod. 
+                And, to end your game if the game crashed, you will have to open Task Manager, and end the process there.
+
+				<p><strong>Q: How do I revert back to the original vanilla game?</strong><br>
+				A: Restore your backed-up <code>xScripts.rxdata</code> file, or verify game file integrity via Steam properties.</p>
+
+                <p><strong>Q: Windows Defender/my antivirus flags the file (.rxdata) as a virus</strong><br>
+				A: This shouldn't happen, since it's not happening for me on Windows Defender, (W11 LTSC), Add the .rxdata as a exclusion to the antivirus. I assure you it's safe, literally open source. If you don't trust me, you can extract the <code>.rxdata</code> and find out, or look at the <code>.rb</code> file i uploaded.
+
+                <p><strong>If a problem you are having is not listed here, please contact me, or try to fix it yourself.</strong></p>
+
+			</div>
+		</div>
+
+		<div id="footer">
+			This website was made by <a href="https://github.com/frizzy-cmd" target="_blank">Nightregion</a> | 
+            <a href="legal.html">Legal</a> | 
+			<a href="https://github.com/frizzy-cmd/NRHomepage" target="_blank">Source Code</a>
+			
+			<div class="theme-picker">
+			<span>Theme: </span>
+				<select id="themeSelect" class="theme-dropdown">
+					<option value="theme-barrens">The Barrens (Purple)</option>
+					<option value="theme-refuge">The Refuge (Pink/Red)</option>
+					<option value="theme-glen">The Glen (Emerald Green)</option>
+				</select>
+		</div>
+
+		<div id="sub-footer">
+			OneShot and its assets are property of Future Cat LLC.
+		</div>
+	</body>
+</html>
