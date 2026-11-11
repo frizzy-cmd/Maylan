@@ -28,4 +28,4 @@ TRUE/FALSE SWITCHES
 
 Not really confident for the game var array section..
 
-For easier usability with graphic user interface, try visiting Alula Editor! [https://nightregion.teaa.workers.dev/p-settings-generate]
+For easier usability with graphic user interface, try visiting Alula Editor! [https://maylan.teaa.workers.dev/p-settings-generate]

@@ -1,6 +1,6 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "nightregion", // change name to nightregion
+    "name": "maylan", // change name to maylan
     "main": "_worker.js",
     "compatibility_date": "2026-08-15",
     "observability": {

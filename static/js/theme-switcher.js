@@ -24,7 +24,7 @@
 
 // +++++
 // =========================================
-// theme-switcher.js - Initial commit by Nightregion
+// theme-switcher.js - Initial commit by Maylan
 
 // Description:
 // This script serves switching themes and tracking. since theme-switcher is already defined in all pages, we just put code here. Probably gonna do the same for future use

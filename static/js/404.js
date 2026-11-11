@@ -5,7 +5,7 @@ var REAL_PAGES = [
 	'index', 'about-me', 'about-me-specs', 'alula', 'audio-index',
 	'calamus-toolkit', 'cedric-reader', 'changelog', 'graphics-index',
 	'isthatagubby', 'legal', 'ling-launcher', 'magpie-collector',
-	'onemsg', 'p-settings-generate', 'rue-studio', 'settings', 'twm-diagnostics'
+	'onemsg', 'p-settings-generate', 'rue-studio', 'settings', 'twm-diagnostics', 'onepresence'
 ];
 
 // classic levenshtein.. nothing fancy

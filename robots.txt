@@ -10,4 +10,4 @@ Disallow: /unavail.html
 
 Disallow: /alula.html
 
-Sitemap: https://nightregion.teaa.workers.dev/sitemap.xml
+Sitemap: https://maylan.teaa.workers.dev/sitemap.xml

@@ -7,7 +7,7 @@ var WHAT_CHANGED = [
 		category: "Website",
 		title: "Fallback Site",
 		changes: [
-			"Incase the main site is down (https://nightregion.teaa.workers.dev/), you can visit the fallback site at https://frizzy-cmd.github.io/Nightregion/",
+			"Incase the main site is down (https://maylan.teaa.workers.dev/), you can visit the fallback site at https://frizzy-cmd.github.io/Maylan/",
 			"PLEASE keep in mind that this is a FALLBACK site. Some site features such as the One Message page and other stuff are not available due to Cloudflare issues."
 		]
 	},

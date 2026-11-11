@@ -432,7 +432,7 @@ class OnePresenceRPCHandler(tk.Tk):
 
                 messagebox.showerror(
                     "OnePresence",
-                    f"Warning! OnePresence has detected a parsing error in {status_file_path}. If you did not modify this file, please contact the developer [Nightregion] with the error provided below:\n\nError: {err_text}\nfile contents: {file_contents}\n\nTo fix this issue, please select everything in the .txt file, clear everything, then save. This won't affect your gameplay."
+                    f"Warning! OnePresence has detected a parsing error in {status_file_path}. If you did not modify this file, please contact the developer [Maylan] with the error provided below:\n\nError: {err_text}\nfile contents: {file_contents}\n\nTo fix this issue, please select everything in the .txt file, clear everything, then save. This won't affect your gameplay."
                 )
                 time.sleep(5)
 

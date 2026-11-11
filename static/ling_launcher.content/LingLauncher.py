@@ -16,9 +16,9 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer
 from PyQt6.QtGui import QIcon, QPixmap, QColor, QPainter, QAction
 
 MOD_PACK = {
-    "Rue Studio v0.1-RLS": "https://nightregion.teaa.workers.dev/static/rue_studio.content/xScripts.rxdata",
-    "Calamus Toolkit v0.5.4-GA": "https://nightregion.teaa.workers.dev/static/ckit/xScripts.rxdata",
-    "Magpie Collector v0.1-BT": "https://nightregion.teaa.workers.dev/static/magpie_collector.content/xScripts.rxdata"
+    "Rue Studio v0.1-RLS": "https://maylan.teaa.workers.dev/static/rue_studio.content/xScripts.rxdata",
+    "Calamus Toolkit v0.5.4-GA": "https://maylan.teaa.workers.dev/static/ckit/xScripts.rxdata",
+    "Magpie Collector v0.1-BT": "https://maylan.teaa.workers.dev/static/magpie_collector.content/xScripts.rxdata"
 }
 
 # rippped STRAIGHT out from my site bro
@@ -126,7 +126,7 @@ class PingWorker(QThread):
     ping_result = pyqtSignal(bool, str)
     def run(self):
         try:
-            r = requests.get("https://nightregion.teaa.workers.dev/", timeout=5)
+            r = requests.get("https://maylan.teaa.workers.dev/", timeout=5)
             if r.status_code < 500:
                 self.ping_result.emit(True, "OK")
             else:
