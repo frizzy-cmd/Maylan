@@ -2,6 +2,16 @@
 
 var WHAT_CHANGED = [
 	{
+		version: "v1.0.9",
+		date: "November 12, 2026",
+		category: "Website",
+		title: "Name Change & some other stuff",
+		changes: [
+			"All occurences of Nightregion have been changed to Maylan!",
+			"Additional bug fixes & improvements"
+		]
+	},
+	{
 		version: "v1.0.8",
 		date: "September 26, 2026",
 		category: "Website",

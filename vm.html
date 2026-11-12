@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OneShot in a VM</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="author" content="maylan">
+
+    <link rel="icon" type="image/png" href="static/img/iconlight.png">
+</head>
+
+<body bgcolor="#000080" text="white" style="font-family: monospace; text-align: center; margin-top: 10%; cursor: wait; user-select: none;">
+  <h2 style="margin-bottom: 4px;">Loading OneShot [VM]</h2>
+  <div id="sessionInfo" style="font-size: 11px; color: #7ea6e0; margin-bottom: 18px;">session: connecting... | node: local-vm</div>
+  
+  <progress id="bar" value="0" max="100" style="width: 50%; height: 35px;"></progress>
+  
+  <p id="status" style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">0.0% - Initializing VM...</p>
+  <p id="stats" style="font-size: 13px; color: #a8c7fa; margin-top: 0;">Speed: 0.00 MB/s | ETA: Calculating...</p>
+
+  <div id="log" style="width: 50%; height: 150px; margin: 20px auto; background: #000050; border: 1px solid #5c85d6; text-align: left; padding: 10px; overflow-y: auto; font-size: 12px; color: #cccccc; line-height: 1.5; box-shadow: inset 0 0 10px #000022;">
+  </div>
+
+  <div style="font-size: 11px; color: #6c8ec9; margin-top: 10px;">
+      Please do not close or refresh this window while the VM is booting
+  </div>
+
+  <script>
+    var val = 0;
+    var retries = 0;
+    var currentPhase = "Initializing VM";
+    var isStalled = false;
+    var sid = Math.random().toString(36).substring(2, 10) + "-" + Math.floor(Math.random() * 9000 + 1000);
+    document.getElementById('sessionInfo').innerText = "ID: " + sid + " | OK";
+
+    const lgs = [
+      { pct: 5,  status: "Connecting to virtual machine...", log: "Establishing QEMU/KVM hypervisor socket..." },
+      { pct: 15, status: "Verifying integrity of virtual machine...", log: "Checking disk..." },
+      { pct: 28, status: "Downloading OneShot assets...", log: "Fetching package manifest from remote repository..." },
+      { pct: 45, status: "Extracting OneShot assets...", log: "Unpacking oneshot-latest-winx64.zip from remote repository..." },
+      { pct: 62, status: "Verifying integrity of game files...", log: "Validating SHA-256 hash for root DLLs" },
+      { pct: 75, status: "Verifying user permissions...", log: "Mounting path Documents/My Games/OneShot ..." },
+      { pct: 88, status: "Starting Windows...", log: "Booting NT Kernel (v10.0.19045)..." },
+      { pct: 95, status: "Starting Windows...", log: "Loading user32.dll..." }
+    ];
+
+    function lg(text, color) {
+      if (!color) color = "#cccccc";
+      var logBox = document.getElementById('log');
+      var time = new Date().toLocaleTimeString();
+      logBox.innerHTML += '<span style="color:' + color + '">[' + time + '] ' + text + '</span><br>';
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function title(p) {
+        document.title = "(" + Math.floor(p) + "%) OneShot in a VM";
+    }
+
+    function updLoad() {
+      var delay = Math.random() * 600 + 200;
+
+      if (!isStalled && val > 38 && val < 44 && Math.random() > 0.7) {
+          isStalled = true;
+          document.getElementById('stats').innerText = "Speed: 0.00 MB/s | ETA: Stalled...";
+          setTimeout(function() { isStalled = false; updLoad(); }, 1800);
+          return;
+      }
+
+      if (val < 99.9) {
+        var step = val > 85 ? (Math.random() * 0.9 + 0.1) : (Math.random() * 5.5 + 1);
+        
+        // occasional burst speed
+        if (val > 28 && val < 60 && Math.random() > 0.85) {
+            step += 3.5;
+        }
+
+        val = Math.min(99.9, val + step);
+        title(val);
+
+        if (lgs.length > 0 && val >= lgs[0].pct) {
+          var m = lgs.shift();
+          currentPhase = m.status;
+          lg(m.log, "#7ee787");
+        } else if (Math.random() > 0.45) {
+          var size = (Math.random() * 4.2 + 0.2).toFixed(1);
+          lg("Loaded file (" + size + " MB)");
+        }
+
+        var speed = val > 85 
+          ? (Math.random() * 0.45 + 0.05).toFixed(2) 
+          : (Math.random() * 18.5 + 4.2).toFixed(2);
+        
+        var eta = Math.max(1, Math.ceil((100 - val) * (val > 85 ? 6 : 0.5)));
+
+        document.getElementById('bar').value = val;
+        document.getElementById('status').innerText = val.toFixed(1) + "% - " + currentPhase;
+        document.getElementById('stats').innerText = "Speed: " + speed + " MB/s | ETA: " + eta + "s";
+
+      } else {
+        retries++;
+        delay = Math.random() * 1800 + 1000;
+        document.title = "(99%) OneShot in a VM";
+
+        document.getElementById('bar').value = 99.9;
+        document.getElementById('status').innerText = "99.9% - Starting Windows (Applying user settings)";
+        document.getElementById('stats').innerText = "Speed: 0.00 MB/s | ETA: Calculating...";
+
+        if (retries === 1) {
+          lg("Executing oneshot.exe in root", "#ffd700");
+        } else if (retries % 3 === 0) {
+          lg("Warning! Display driver timeout on virtual GPU 0 (attempt " + retries + "). Retrying", "#ff6b6b");
+        } else {
+          lg("Waiting for response (" + (retries * 2) + "s elapsed)...", "#a8c7fa");
+        }
+      }
+
+      setTimeout(updLoad, delay);
+    }
+
+    setTimeout(function() {
+        lg("Allocated VM instance", "#7ee787");
+        setTimeout(updLoad, 600);
+    }, 400);
+  </script>
+</body>
+</html>
