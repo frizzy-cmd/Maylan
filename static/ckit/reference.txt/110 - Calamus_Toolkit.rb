@@ -5,19 +5,20 @@
 # 1. Press R to open ModMenu.
 # 2. Use current ACTION keybind to select
 # 
-# - CalamusToolkit v0.5.4-GA
+# - CalamusToolkit v0.5.5-GA
 # - Licensed under the GNU GPL v3 license.
 # - Last updated this section: 01/08/2026 10:43 PM UTC+8
 # 
 #      ++++++++++++++++++++++++ LEGAL ++++++++++++++++++++++++++++++
 # - CalamusToolkit is not affiliated, nor endorsed by Future Cat LLC in any way.
 # - OneShot, its characters, story, assets, and code are the property of Future Cat LLC.
-# - CalamusToolkit, and the contents of 110 - Calamus_Toolkit.rb are property of the creator.
+# - CalamusToolkit, and the contents of 110 - Calamus_Injector.rb are property of the creator.
 # - CalamusToolkit is made, developed, built, maintained, by Kip at codeberg.org/kipkat/calamustoolkit.
 #
 #     ++++++++++++++++++++++++ READ ME ++++++++++++++++++++++++++++++
 # - PLEASE backup your unmodified xScripts.rxdata, save.dat and other save files. This mod menu MAY corrupt your save files. I am not responsible for any corrupt files!
-# - This mod menu has been tested on: 64 bit Windows 10 LTSC 2021 IoT 64 bit Windows 11 Pro (Tiny11), OneShot 64 bit [Steam client] | No dependencies required.
+# - This mod menu has been tested on: 64 bit Windows 10 LTSC 2021 & Windows 11 LTSC 2024, OneShot x64 [Steam client] | No dependencies are required for this mod!
+#
 # - May conflict wth other scripts that heavily alias Scene_Map#update or use variables/switches 88-99. Not guranteed it'll conflict, not guranteed it won't conflict.
 # - View the changelogs on the Releases section of the Codeberg repo. codeberg.org/kipkat/calamustoolkit
 # 
@@ -46,86 +47,18 @@
 
 # START!
 
-# TO INSTALL THIS MOD, PLEASE REVIEW THE CODEBERG REPO INSTEAD!! 
+# TO INSTALL THIS MOD, PLEASE REVIEW PROPER INSTALLATION GUIDES!
+#
+# =====++++ Links: ++++=====
+#
+# Codeberg: https://codeberg.org/kipkat/calamustoolkit
+# GitHub: https://github.com/frizzy-cmd
+# Personal website: https://maylan.teaa.workers.dev
+# Personal website [CalamusToolkit] https://maylan.teaa.workers.dev/calamus-toolkit
+# ModDB: https://www.moddb.com/games/oneshot/downloads/calamus-toolkit
 
-
-
-# ++== NOTES TO SELF SECTION: [DO NOT MIND IF YOU ARE NOT ME] ==++
-
-# 068, 067 .rb is built-in debug ux for oneshot but we use our diagnostics for detail.
-# FILES, 061, 062, 063, 060 HANDLE DIALOGUE BOXES
-# 061 = Window name input
-# 062 Window input number
-# 063 Window msg (default dialogue box, pretty sure)
-# 060 Window name Edit
-
-# #{pc_user} [computer username], defined line 626. not global. pls make global soon. [upd: use \\p instead]
-
-# FOUND OUT TODAY THAT if you surround text in $game_temp.message_text("[HELLO]") it does the robot text sfx
-
-# force save function may be not working.. may deprecate.. it uses backup save file isntead of save.dat, it says its corrupted apparently.
-# picky..
-# i think xScripts.rxdata (incl this script gets launched only when ingame? pressing r in main menu doesnt work. obvs.)
-
-# to see dialogues for reference/tinkering, go to C:\Users\Kip\Desktop\extracteddata\extracted_common_events
-# for ex, in 051 - prophet explains the lightbulb.json,
-# this is the lines:
-
-#     {
-#       "parameters": [
-#         "@niko Your... \\.\\.\\@niko_speak sun?" # YOU CAN LIKE MAKE PAUSES IN DIALOGUES WITH \\.\\.\\ [DEPENDS ON TEXT?]. WHAT THE FUCK. IT TOOK ME THIS LONG. FUCKING HELL MATE
-#       ],
-#       "indent": 0,
-#       "code": 101
-#     },
-#     {
-#       "parameters": [
-#         "@prophet_omg [Yes!]"
-#       ],
-#       "indent": 0,
-#       "code": 101
-#     },
-#     {
-
-# GO TO C:\Users\Kip\Desktop\calamformat.html FOR UI FORMATTER
-# OR FOR QUICK REF:
-#  \\. [15 FRAME PAUSE]
-#  \\.\. [30 FRAME PAUSE]
-#  \\| [60 FRAME PAUSE]
-# 
-# [ONLY PAUSE. DOES NOT WAIT FOR USER TO INTERACT WITH DIALOGUE THEN RESUME. IDK HOW TO IMPLEMENT. ITS 1 AM I AINT DOING ALLAT!!]
-
-# NEW DISCOVERY?
-# "@niko_eyeclosed \\p... someone lives here...\\>\\nWe can't just sleep in their bed.
-# \\p is the player's computer username?
-# \\>\\ makes a new line, waits for user interaction before continuing dialogue [possibly]
-# ed_message or anything with ed and message is the fullscreen black box message box
-# an example of this, is in NO FAST TRAVEL.json
-# "@ed [You cannot fast travel right now.]"
-# .pretty sure i know what this screen means, and to everyone else.
-
-# idk, the dialogues are json, this is code. so i dont know how it'll go out..
-
-# NEW DISCOVERIES 3/8/2026 9:59 PM
-# $game_temp.message_desktop_text = "simulated desktop msg"
-# $game_temp.message_doc_text = "document text, one of the examples are like the notes or like documents you find, like in the outpost theres some documents you can read and that triggers this"
-# $game_temp.message_ed_text = "fullscreen black box thingy, like when you get the film at the refuge >> [\\p is the players user] \\p." Although i believe it uses the like ingame name or whatever the user set it to if they decide to change to another name during prophetbot dialogue.
-
-# for info alert [native dialogues handled under 109 edtext.rb]
-# EdText.info("info symbol")
-# EdText.err("info symbol")
-# EdText.yesno("yes or no options")
-
-# yes/no choice (returns true/false depending on what the plr click)
-# if EdText.yesno("gives Yes or No options")
-#   yes
-# else
-#   no
-# end
-
-# ++== END NOTES TO SELF SECTION ==++
-
-
+# Discord: @maylan.html [User ID: 946316462182789130]
+# Email: support.kipsite@gmail.com
 
 #==============================================================================
 # ** Window_CalamusCoordInput
@@ -272,6 +205,8 @@ end
 
 class ToolGiver_Menu < Window_Selectable
   attr_reader :commands
+
+
   #==============================================================================
   # * initialize: All modifications.
   #==============================================================================
@@ -304,7 +239,7 @@ class ToolGiver_Menu < Window_Selectable
     else
       os_str = "IDontKnowWhatOS" # unknown OS
     end
-    @header_text = "CalamusToolkit v0.5.4-GA [#{os_str}]"
+    @header_text = "CalamusToolkit v0.5.5-GA [#{os_str}]"
     # if upd version, make sure to go to @idr_text.bitmap.draw_text aswell to upd text for diagnostics !!
     # also at $INJECTOR_VERSION aswell
     
@@ -478,6 +413,7 @@ class Scene_Map
         when 8 # fps engine setter
           $game_temp.num_input_variable_id = 92
           $game_temp.num_input_digits_max = 4
+          $game_temp.message_face = "calamus"
           $game_temp.message_text = "Input set FPS (0001 - 9999):\nDefault FPS is 0060"
           $game_temp.message_window_showing = true
           $pending_fps_val = true
@@ -493,6 +429,7 @@ class Scene_Map
           else
             $game_temp.num_input_variable_id = 91 
             $game_temp.num_input_digits_max = 2
+            $game_temp.message_face = "calamus_smile"
             $game_temp.message_text = "Select diagnostics mode:\n01: Standard diagnostics\n02: Ext. diagnostics (VISUAL)\n03: Event inspector"
             $game_temp.message_window_showing = true
             $pending_diag_choice = true
@@ -553,7 +490,7 @@ class Scene_Map
           @tool_menu.dispose
           @tool_menu = nil
           $game_temp.message_face = "alula_speak"
-          $game_temp.message_text = "Calamus Toolkit was made by the creator of Alula Editor. [Kip!] (A OneShot save file generator/editor)" 
+          $game_temp.message_text = "Calamus Toolkit was made by the creator of Alula Editor. [Maylan!] (A OneShot save file generator/editor)" 
           # $game_temp.message_window_showing = true DEPRECATED. UNCOMMENT LINE = WILL ENABLE moved to about_dialogue_step
           $about_dialogue_step = 1
         end
@@ -580,11 +517,11 @@ class Scene_Map
       when 1 # legal n about
         # $game_temp.message_ed_text = "ed text" i was testing something -otc | is this like where the fullscreen black box msg thingy is -kip | yeah its on 109 -otc| kk -kip
         $game_temp.message_face = "alula_speak"
-        $game_temp.message_text = "Calamus Toolkit was made by the creator of Alula Editor! [Kip] \\.\\. (A OneShot save file generator/editor) [1/6]"
+        $game_temp.message_text = "Calamus Toolkit is made by Maylan \\.\\. [Website at maylan.teaa.workers.dev] [1/6]"
         $about_dialogue_step = 2
       when 2
         $game_temp.message_face = "magpie_smile"
-        $game_temp.message_text = "..and also the creator of Magpie Collector! (A OneShot debugger) \\| See the flow here? Alula(Editor), \\. Calamus(Injector), \\. Magpie(Collector) :D [2/6]"
+        $game_temp.message_text = "..and also the creator of Magpie Collector! (A OneShot debugger) [Like i said, my site! Hosts some pretty cool stuff and is the main gateway [aswell with Codeberg] [2/6]"
         $about_dialogue_step = 3
       when 3
         $game_temp.message_face = "af"
@@ -600,7 +537,7 @@ class Scene_Map
         $about_dialogue_step = 6
       when 6
         $game_temp.message_face = "calamus_sad"
-        $game_temp.message_text = "Calamus Toolkit is built & maintained by Kip. \\.\\. | Codeberg: codeberg.org/kipkat [6/6]"
+        $game_temp.message_text = "Calamus Toolkit is built & maintained by Maylan & OT1C. \\.\\. | Codeberg: codeberg.org/kipkat | Codeberg repo: codeberg.org/kipkat/calamustoolkit [6/6]"
         $about_dialogue_step = 0 
       end
       $game_temp.message_window_showing = true
@@ -613,7 +550,7 @@ class Scene_Map
         $game_party.gain_item(id, 1)
       else
         $game_temp.message_face = "calamus_heh"
-        $game_temp.message_text = "Eheh.. Invalid item ID or I couldn't find the ID.. \\| Try looking on the Codeberg repository for all the item IDs!"
+        $game_temp.message_text = "Sorry! Invalid item ID or I couldn't find the ID.. \\| Try looking on the Codeberg repository for all the item IDs!"
         $game_temp.message_window_showing = true
       end
       $pending_item_id = false
@@ -647,7 +584,7 @@ class Scene_Map
 
       if target_map >= 264 || target_map <= 0
         $game_temp.message_face = "calamus_sad"
-        $game_temp.message_text = "Whoops, sorry \\p. I couldn't find Map ID #{target_map}. Does it exist?"
+        $game_temp.message_text = "Err, sorry \\p. I couldn't find Map ID #{target_map}. Does it exist?"
         $game_temp.message_window_showing = true
         $game_variables[96] = $game_map.map_id
       else
@@ -767,7 +704,6 @@ class Scene_Map
     end
 
     # custom overlay
-    # nest
     if @coord_window
       @coord_window.update
       if @coord_window.disposed?
@@ -781,9 +717,9 @@ class Scene_Map
             $game_temp.message_face = "calamus_smile"
             $game_temp.message_text = "Teleported to X: #{coords[0]}, Y: #{coords[1]}!\nSaved last coordinates."
           else
-            pc_user = ENV['USER'] || ENV['USERNAME'] || "User" # if fail, then fallback to User. USER is for UNIX. USERNAME is for Windows. NOT GLOBAL.
+            pc_user = ENV['USER'] || ENV['USERNAME'] || "User" # if fail, then fallback to User. USER is for UNIX. USERNAME is for Windows
             $game_temp.message_face = "calamus_sad"
-            $game_temp.message_text = "Err.. Format parse error! #{pc_user}, please remember to use syntax like: -15,30 or 5,12 .. Thanks!" # we can replace pc_user with \\p, but fuck it if it works it works then i dont wanan mess with that shit yet, ik i can easily replace it but fuck no!
+            $game_temp.message_text = "Err.. I can't seem to understand this! #{pc_user}, please remember to use syntax like: -15,30 or 5,12 .. Thanks!" # we can replace pc_user with \\p, but fuck it if it works it works then i dont wanan mess with that shit yet, ik i can easily replace it but fuck no!
           end
           $game_temp.message_window_showing = true
         elsif @coord_window.retp_triggered
@@ -802,11 +738,11 @@ end
 #==============================================================================
 # * upd_check: Checks for updates.
 #==============================================================================
-$INJECTOR_VERSION = "v0.5.4-GA"
+$INJECTOR_VERSION = "v0.5.5-GA"
 
 def upd_check
   tmp = "calamus_upd.tmp"
-  ps = "powershell -WindowStyle Hidden -Command \"$ProgressPreference='SilentlyContinue'; try { $r = Invoke-RestMethod -Uri 'https://codeberg.org/api/v1/repos/kipkat/calamustoolkit/releases/latest' -TimeoutSec 2; $out = $r.tag_name + '|||' + $r.name; [System.IO.File]::WriteAllText('#{tmp}', $out) } catch { [System.IO.File]::WriteAllText('#{tmp}', 'ERROR') }\""
+  ps = "-WindowStyle Hidden -Command \"$ProgressPreference='SilentlyContinue'; try { $r = Invoke-RestMethod -Uri 'https://codeberg.org/api/v1/repos/kipkat/calamustoolkit/releases/latest' -TimeoutSec 2; $out = $r.tag_name + '|||' + $r.name; [System.IO.File]::WriteAllText('#{tmp}', $out) } catch { [System.IO.File]::WriteAllText('#{tmp}', 'ERROR') }\""
   shell = Win32API.new('shell32', 'ShellExecuteA', 'PPSSPI', 'I') rescue nil
   
   if shell
@@ -971,7 +907,7 @@ def execute_map_jump(map_id)
   $game_temp.player_new_direction = 2
   
   $game_temp.message_face = "calamus_smile"
-  $game_temp.message_text = "Jumping to Map ID #{map_id}! Spawning at X:15, Y:15."
+  $game_temp.message_text = "Jumping to Map ID #{map_id}! Spawning at X:15, Y:15 by default."
   $game_temp.message_window_showing = true
 end
 
@@ -1000,24 +936,24 @@ def force_map_refresh
 end
 
 #==============================================================================
-# * force_save: Forces write to save.dat in %appdata%\Oneshot (or wtv user's os uses)
+# * force_save: Forces an absolute write to save.dat.
 #==============================================================================
 def force_save
   begin
-    # FIND PATH.
+    # resolve save path
     save_dir = defined?(Oneshot::SAVE_PATH) ? Oneshot::SAVE_PATH : (ENV['APPDATA'] ? ENV['APPDATA'] + "/Oneshot" : ".")
     Dir.mkdir(save_dir) unless File.exist?(save_dir)
     
     target_save = "#{save_dir}/save.dat"
     target_perma = "#{save_dir}/p-settings.dat"
 
-    # set existing diags to none if avail: will softlock game if force save during diag + end proc w/ taskmgr. from exp
+    # clr existing diags
     if $game_temp
       $game_temp.message_window_showing = false
       $game_temp.message_text = nil
     end
 
-    #marshal.dump
+    # dir write
     File.open(target_save, 'wb') do |file|
       Marshal.dump(Graphics.frame_count, file)
       $game_system.save_count += 1
@@ -1078,11 +1014,11 @@ def toggle_noclip
     end
   end
 
-  # status = new_state ? "enabled" : "disabled"
-  # [#{status}]
-  # Deprecated o7 | has been implemented since the VERY FIRST versions of Calamus Toolkit
+  status = new_state ? "enabled" : "disabled"
   $game_temp.message_face = "calamus_speak"
-  $game_temp.message_text = "Wait a second, Niko, since when could you walk anywhere?"
+  # $game_temp.message_text = "Wait a second, Niko, since when could you walk anywhere?"
+  $game_temp.message_text = "Successfully [#{status}] Walk Anywhere!"
+  # i didnt mean to add [] to the status but now it looks cooler
   $game_temp.message_window_showing = true
 end
 
@@ -1125,7 +1061,7 @@ class Debug_Coord_Display
     when 2 then "Extended Visuals"
     when 3 then "Event Inspector"
     end
-    @idr_text.bitmap.draw_text(0, 0, 600, 32, "CalamusToolkit v0.5.4-GA | Diagnostics [#{label_suffix}]")
+    @idr_text.bitmap.draw_text(0, 0, 600, 32, "CalamusToolkit v0.5.5-GA | Diagnostics [#{label_suffix}]")
 
     @pass_cache = {}
     @cached_map_id = nil
@@ -1365,4 +1301,4 @@ end
 # probably wont work because i dont know how the fuck oneshot titles it windows i tried to find it but to no avail
 # ^old comment
 
-# Celebrating 1131 lines of code!
+# Celebrating 1304 lines of code!
