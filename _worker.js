@@ -1,5 +1,15 @@
 // _worker.js - 
 
+let siteCache = null;
+const SITE_TTL = 30 * 1000;
+let settingsReady = false;
+
+// admcooldown
+const MAX_FAILS = 6;
+const LOCK_MS = 2 * 60 * 1000;
+const FAIL_WINDOW = 10 * 60 * 1000; // old misses stop counting after this!
+let failTblReady = false;
+
 export default {
 	async fetch(request, env, ctx) {
 		// 1. CORS Headers
@@ -20,21 +30,10 @@ export default {
 
 		const db = env.DB || env.forum_db;
 		const clientIP = request.headers.get('cf-connecting-ip') || '127.0.0.1';
-		const ipHash = await hashIP(clientIP);
+		const ipHash = await hashIP(clientIP, env.IP_SALT);
 
-		let siteStatus = 'online';
-		let maintenanceNote = '';
-
-		if (db) {
-			try {
-				const statusRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'site_status'`).first();
-				const noteRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'maintenance_note'`).first();
-				if (statusRow && statusRow.value) siteStatus = statusRow.value;
-				if (noteRow && noteRow.value) maintenanceNote = noteRow.value;
-			} catch (e) {
-				siteStatus = 'online';
-			}
-		}
+		const site = db ? await getSiteStatus(db) : null;
+		const siteStatus = site ? site.status : 'online';
 
 		if (siteStatus === 'offline') {
 			const isExempt = path === '/admin-panel.html' || 
@@ -51,7 +50,12 @@ export default {
 
 		// ALULAVERIFY GATE - added 6/9/2026.. checks for the 'stamp' cookie
 		// WHAT IS EXEMPT?: check.html itself, static assets, and all /api/ routes (static assets to break redirects from linglauncher which has old links to rxdatas.)
-        if (!path.startsWith('/api/') && !path.startsWith('/static/') && path !== '/check.html' && path !== '/check') {
+        const gateFree = path.startsWith('/api/') || path.startsWith('/static/') || path.startsWith('/.well-known/') ||
+        path === '/check.html' || path === '/check' ||
+        path === '/robots.txt' || path === '/sitemap.xml' ||
+        path === '/googlee5b656ace634aa9c.html' || path === '/googlee5b656ace634aa9c';
+
+        if (!gateFree) {
             var uaForGate = (request.headers.get('User-Agent') || '').toLowerCase();
             var previewBotWords = ['discordbot', 'twitterbot', 'slackbot', 'facebookexternalhit', 'telegrambot', 'whatsapp', 'linkedinbot', 'skypeuripreview', 'embedly', 'googlebot', 'bingbot', 'duckduckbot', 'yandexbot', 'applebot'];
             
@@ -106,7 +110,7 @@ export default {
 				dbError = 'D1 database binding (DB) is missing in env';
 			} else {
 				try {
-					await db.prepare(`CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`).run();
+					await ensureSettingsTable(db);
 					const statusRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'site_status'`).first();
 					const noteRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'maintenance_note'`).first();
 					if (statusRow && statusRow.value) statusVal = statusRow.value;
@@ -131,7 +135,7 @@ export default {
 
 			if (db) {
 				try {
-					await db.prepare(`CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`).run();
+					await ensureSettingsTable(db);
 					const textRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'announcement_text'`).first();
 					const closeRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'announcement_closable'`).first();
 					const expRow = await db.prepare(`SELECT value FROM site_settings WHERE key = 'announcement_expires'`).first();
@@ -158,16 +162,15 @@ export default {
 		}
 
 		if (path === '/api/admin/site-settings' && method === 'POST') {
-			const adminKey = request.headers.get('X-Admin-Key');
-			if (!adminKey || !env.ADMIN_SECRET || adminKey.trim() !== env.ADMIN_SECRET.trim()) {
-				return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
-			}
+			const auth = await checkAdmin(env, ipHash, request.headers.get('X-Admin-Key'));
+			if (!auth.ok) return authFail(auth, corsHeaders);
 
 			const body = await request.json();
 			const { action, status, note, announcementText, closable, durationMinutes } = body;
 
 			try {
 				if (action === 'set_status') {
+					siteCache = null; // so the new status shows instantly
 					await env.DB.prepare(`DELETE FROM site_settings WHERE key = 'site_status'`).run();
 					await env.DB.prepare(`INSERT INTO site_settings (key, value) VALUES ('site_status', ?)`).bind(status || 'online').run();
 
@@ -256,10 +259,8 @@ export default {
 		}
 
 		if (path === '/api/admin/analytics/summary' && method === 'GET') {
-			const adminKey = request.headers.get('X-Admin-Key');
-			if (!adminKey || !env.ADMIN_SECRET || adminKey.trim() !== env.ADMIN_SECRET.trim()) {
-				return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
-			}
+			const auth = await checkAdmin(env, ipHash, request.headers.get('X-Admin-Key'));
+			if (!auth.ok) return authFail(auth, corsHeaders);
 
 			try {
 				const topPages = await env.DB.prepare(
@@ -281,6 +282,8 @@ export default {
 				const dailyViews = await env.DB.prepare(
 					`SELECT day, COUNT(*) as cnt FROM page_views GROUP BY day ORDER BY day DESC LIMIT 14`
 				).all();
+				// CUNT LOL
+				// longley
 
 				const topClicks = await env.DB.prepare(
 					`SELECT path, tag, label, COUNT(*) as cnt FROM click_events GROUP BY path, tag, label ORDER BY cnt DESC LIMIT 30`
@@ -384,7 +387,7 @@ export default {
 
 				let messages = { results: [] };
 				try {
-					messages = await env.DB.prepare(`SELECT * FROM messages ORDER BY msg_number DESC LIMIT 100`).all();
+					messages = await env.DB.prepare(`SELECT id, msg_number, author, portrait, content, lights_count, pancakes_count, created_at FROM messages ORDER BY msg_number DESC LIMIT 100`).all();
 				} catch(e) {}
 
 				let userCheck = null;
@@ -427,12 +430,12 @@ export default {
                     return new Response(JSON.stringify({ error: 'You have already left your OneMessage on the wall!' }), { status: 403, headers: corsHeaders });
                 }
 
-                let countRow = { cnt: 0 };
+                let topRow = null;
                 try {
-                    countRow = await env.DB.prepare(`SELECT COUNT(*) as cnt FROM messages`).first() || { cnt: 0 };
+                    topRow = await env.DB.prepare(`SELECT MAX(msg_number) as hi FROM messages`).first();
                 } catch(e) {}
 
-                const msgNumber = (countRow.cnt || 0) + 1;
+                const msgNumber = ((topRow && topRow.hi) || 0) + 1;
                 const id = 'msg_' + Date.now();
 
                 await env.DB.prepare(
@@ -459,19 +462,15 @@ export default {
             //adm login
             if (path === '/api/onemsg/admin/login' && method === 'POST') {
                 const body = await request.json();
-                const { password } = body;
-                if (password && env.ADMIN_SECRET && password.trim() === env.ADMIN_SECRET.trim()) {
-                    return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
-                }
-                return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
+                const auth = await checkAdmin(env, ipHash, body.password);
+                if (!auth.ok) return authFail(auth, corsHeaders);
+                return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
             }
 
 			// adm delete and purge
 			if (path === '/api/onemsg/admin/delete' && method === 'POST') {
-                const adminKey = request.headers.get('X-Admin-Key');
-                if (!adminKey || !env.ADMIN_SECRET || adminKey.trim() !== env.ADMIN_SECRET.trim()) {
-                    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
-                }
+                const auth = await checkAdmin(env, ipHash, request.headers.get('X-Admin-Key'));
+                if (!auth.ok) return authFail(auth, corsHeaders);
 
 				const body = await request.json();
 				const { msgId, purgeAll } = body;
@@ -535,8 +534,94 @@ function giveADifficulty(request) {
 	return 3;
 }
 
-async function hashIP(ip) {
-	const msgUint8 = new TextEncoder().encode(ip + '_SALT_KIP_FORUM');
+async function ensureSettingsTable(db) {
+	if (settingsReady) return;
+	await db.prepare(`CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`).run();
+	settingsReady = true;
+}
+
+async function getSiteStatus(db) {
+	const now = Date.now();
+	if (siteCache && now - siteCache.ts < SITE_TTL) return siteCache;
+
+	let status = 'online';
+	let note = '';
+	try {
+		const rows = await db.prepare(`SELECT key, value FROM site_settings WHERE key IN ('site_status', 'maintenance_note')`).all();
+		for (const r of (rows.results || [])) {
+			if (r.key === 'site_status' && r.value) status = r.value;
+			if (r.key === 'maintenance_note' && r.value) note = r.value;
+		}
+	} catch (e) {
+		// db hiccup, dont cache it so the next req retries
+		return { status: 'online', note: '', ts: 0 };
+	}
+
+	siteCache = { status, note, ts: now };
+	return siteCache;
+}
+
+function safeEq(a, b) {
+	a = String(a || '');
+	b = String(b || '');
+	let diff = a.length ^ b.length;
+	for (let i = 0; i < Math.max(a.length, b.length); i++) {
+		diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+	}
+	return diff === 0;
+}
+
+async function checkAdmin(env, ipHash, given) {
+	const db = env.DB || env.forum_db;
+	const now = Date.now();
+	let row = null;
+
+	try {
+		if (!failTblReady) {
+			await db.prepare(`CREATE TABLE IF NOT EXISTS login_fails (ip_hash TEXT PRIMARY KEY, fails INTEGER DEFAULT 0, locked_until INTEGER DEFAULT 0, last_try INTEGER DEFAULT 0)`).run();
+			failTblReady = true;
+		}
+		row = await db.prepare(`SELECT fails, locked_until, last_try FROM login_fails WHERE ip_hash = ?`).bind(ipHash).first();
+	} catch (e) {
+		// dont lock me out
+	}
+
+	if (row && row.locked_until > now) {
+		return { ok: false, locked: true, wait: Math.ceil((row.locked_until - now) / 1000) };
+	}
+
+	const good = !!given && !!env.ADMIN_SECRET && safeEq(String(given).trim(), env.ADMIN_SECRET.trim());
+
+	try {
+		if (good) {
+			if (row) await db.prepare(`DELETE FROM login_fails WHERE ip_hash = ?`).bind(ipHash).run();
+		} else {
+			let fails = (row && now - row.last_try < FAIL_WINDOW) ? row.fails + 1 : 1;
+			let lockedUntil = 0;
+			if (fails >= MAX_FAILS) {
+				lockedUntil = now + LOCK_MS;
+				fails = 0;
+			}
+			await db.prepare(`INSERT OR REPLACE INTO login_fails (ip_hash, fails, locked_until, last_try) VALUES (?, ?, ?, ?)`).bind(ipHash, fails, lockedUntil, now).run();
+		}
+	} catch (e) {}
+
+	return { ok: good, locked: false, wait: 0 };
+}
+
+function authFail(auth, headers) {
+	if (auth.locked) {
+		return new Response(JSON.stringify({ error: 'Too many tries, wait ' + auth.wait + 's' }), {
+			status: 429,
+			headers: Object.assign({}, headers, { 'Retry-After': String(auth.wait) })
+		});
+	}
+	return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers });
+}
+
+async function hashIP(ip, salt) {
+	// old salt as fb so nothing breaks before IP_SALT is set
+	const msgUint8 = new TextEncoder().encode(ip + (salt || '_SALT_KIP_FORUM'));
 	const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
 	return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);

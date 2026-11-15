@@ -2,6 +2,21 @@
 
 var WHAT_CHANGED = [
 	{
+		version: "v1.0.10",
+		date: "November 16, 2026",
+		category: "Website",
+		title: "Security & Fixes",
+		changes: [
+			"OT1C: Admin login now has a cooldown after too many wrong passwords",
+			"Maylan: The site status is also cached now, so pages should load a little faster!",
+			"OT1C: robots.txt and sitemap.xml are no longer sent to [alulaverify]. so search engines can actually crawl them. Oops!",
+			"Longley: Fixed OneMessage numbering aswell new messages always get the next number even after old ones get deleted",
+			"Longley: The OneMessage wall now only sends whatever the page shows",
+			"Longley: OT1C, Maylan: Additional bug fixes & improvements"
+		]
+	},
+	//
+	{
 		version: "v1.0.9",
 		date: "November 12, 2026",
 		category: "Website",

@@ -9,13 +9,13 @@ async function loginAdmin() {
             body: JSON.stringify({ test: true })
         });
 
-        if (res.status !== 401) {
+        if (res.ok) {
             sessionStorage.setItem('kip_admin_token', pwd);
             document.getElementById('loginGate').style.display = 'none';
             document.getElementById('adminControls').style.display = 'block';
             loadSiteStatus();
         } else {
-            showAlert("incorrect", "error");
+            showAlert(res.status === 429 ? "too many tries, wait 2 mins" : "incorrect", "error");
         }
     } catch (e) { alert(e.message); }
 }
@@ -50,6 +50,8 @@ async function setSiteStatus(status) {
     if (res.ok) {
         alert(`Site is now ${status.toUpperCase()}!`);
         loadSiteStatus();
+    } else {
+        alert('didnt work, status ' + res.status);
     }
 }
 
