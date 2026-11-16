@@ -1,12 +1,3 @@
-/* 
-    Copyright (C) 2026 Maylan
-    This website's code is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License v3 as published by
-    the Free Software Foundation. View more info at https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
-    
-    This license EXCLUDES the videos/ directory. https://savedeltarune.teaa.workers.dev/legal for more information
-*/
-
 (function() {
     var konamiSequence = [
         'ArrowUp', 'ArrowUp', 
@@ -31,5 +22,3 @@
         }
     });
 })();
-
-// Lol acceleration
