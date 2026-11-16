@@ -83,6 +83,7 @@ function renderAudioList(elementId, folder, files) {
 		var durId = 'dur_' + folder + '_' + i;
 
 		html += '<div class="audio-row" data-filename="' + escapeHtml(file.toLowerCase()) + '">';
+		html += '  <input type="checkbox" class="sel-box" data-folder="' + folder + '" data-i="' + i + '">';
 		html += '  <div class="audio-title">';
 		html += '    📄 ' + escapeHtml(file);
 		html += '    <span id="' + durId + '" class="audio-duration">--:--</span>';
@@ -170,11 +171,88 @@ function toggleCategory(contentId, arrowId) {
 	}
 }
 
+// this is zip shit. buildZip goes in tooooooooooooooooooo zip-helper.js
+var AUDIO_SETS = { bgm: BGM_FILES, bgs: BGS_FILES, me: ME_FILES, se: SE_FILES };
+
+function audioItem(folder, i) {
+	var file = AUDIO_SETS[folder][i];
+	return { url: 'static/audioindex/' + folder + '/' + encodeURIComponent(file), path: folder + '/' + file };
+}
+
+function getSelItems() {
+	var boxes = document.querySelectorAll('.sel-box:checked');
+	var items = [];
+	for (var i = 0; i < boxes.length; i++) {
+		items.push(audioItem(boxes[i].getAttribute('data-folder'), parseInt(boxes[i].getAttribute('data-i'), 10)));
+	}
+	return items;
+}
+
+function getAllItems() {
+	var items = [];
+	for (var folder in AUDIO_SETS) {
+		for (var i = 0; i < AUDIO_SETS[folder].length; i++) items.push(audioItem(folder, i));
+	}
+	return items;
+}
+
+function zipSelected() {
+	buildZip(getSelItems(), 'Maylan-OneShot-audio.zip');
+}
+
+function zipAll() {
+	buildZip(getAllItems(), 'Maylan-OneShot-audio.zip');
+}
+
+function updateZipCount() {
+	var n = document.querySelectorAll('.sel-box:checked').length;
+	var cnt = document.getElementById('zipCount');
+	var btn = document.getElementById('zipSelBtn');
+	if (cnt) cnt.textContent = n + ' selected';
+	if (btn) btn.textContent = 'Download selected (' + n + ')';
+
+	var heads = document.querySelectorAll('.cat-sel');
+	for (var i = 0; i < heads.length; i++) {
+		var f = heads[i].getAttribute('data-folder');
+		var total = document.querySelectorAll('.sel-box[data-folder="' + f + '"]').length;
+		var on = document.querySelectorAll('.sel-box[data-folder="' + f + '"]:checked').length;
+		heads[i].checked = total > 0 && on === total;
+		heads[i].indeterminate = on > 0 && on < total;
+	}
+}
+
+function clearSelection() {
+	var boxes = document.querySelectorAll('.sel-box');
+	for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+	updateZipCount();
+}
+
+function selectCategory(folder, on) {
+	var rows = document.querySelectorAll('#' + folder + 'List .audio-row');
+	for (var i = 0; i < rows.length; i++) {
+		// skip rows the search is hiding
+		if (rows[i].style.display === 'none') continue;
+		var box = rows[i].querySelector('.sel-box');
+		if (box) box.checked = on;
+	}
+	updateZipCount();
+}
+
+function setupSelection() {
+	document.addEventListener('change', function(e) {
+		var t = e.target;
+		if (!t || typeof t.className !== 'string') return;
+		if (t.className.indexOf('cat-sel') !== -1) selectCategory(t.getAttribute('data-folder'), t.checked);
+		else if (t.className.indexOf('sel-box') !== -1) updateZipCount();
+	});
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	renderAudioList('bgmList', 'bgm', BGM_FILES);
 	renderAudioList('bgsList', 'bgs', BGS_FILES);
 	renderAudioList('meList', 'me', ME_FILES);
 	renderAudioList('seList', 'se', SE_FILES);
+	setupSelection();
 
 	var player = document.getElementById('globalAudioPlayer');
 	if (player) {

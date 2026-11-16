@@ -411,9 +411,21 @@ export default {
                 const body = await request.json();
                 const { author, content, portrait, fingerprint } = body;
 
-                const cleanAuthor = (author || 'Anonymous').trim();
-                const cleanContent = (content || '').trim();
-                const cleanPortrait = (portrait || 'niko.png').trim();
+                const cleanAuthor = String(author || 'Anonymous').trim() || 'Anonymous';
+                const cleanContent = String(content || '').trim();
+                let cleanPortrait = String(portrait || 'niko.png').trim();
+                // fb to niko.png
+                if (!/^[A-Za-z0-9_]{1,40}\.png$/.test(cleanPortrait)) cleanPortrait = 'niko.png';
+                // fp comes from client so cap it
+                const cleanFp = String(fingerprint || 'none').slice(0, 64);
+
+                if (cleanContent.length > 280) {
+                    return new Response(JSON.stringify({ error: 'Message is too long (max 280 characters)!' }), { status: 400, headers: corsHeaders });
+                }
+
+                if (cleanAuthor.length > 32) {
+                    return new Response(JSON.stringify({ error: 'Username is too long (max 32 characters)!' }), { status: 400, headers: corsHeaders });
+                }
 
                 if (!cleanContent) {
                     return new Response(JSON.stringify({ error: 'Message cannot be empty!' }), { status: 400, headers: corsHeaders });
@@ -423,7 +435,7 @@ export default {
                 try {
                     existingMsg = await env.DB.prepare(
                         `SELECT id FROM messages WHERE device_fingerprint = ? OR ip_hash = ? OR LOWER(author) = LOWER(?)`
-                    ).bind(fingerprint || 'none', ipHash, cleanAuthor).first();
+                    ).bind(cleanFp, ipHash, cleanAuthor).first();
                 } catch(e) {}
 
                 if (existingMsg) {
@@ -440,7 +452,7 @@ export default {
 
                 await env.DB.prepare(
                     `INSERT INTO messages (id, msg_number, author, portrait, content, ip_hash, device_fingerprint) VALUES (?, ?, ?, ?, ?, ?, ?)`
-                ).bind(id, msgNumber, cleanAuthor, cleanPortrait, cleanContent, ipHash, fingerprint || 'none').run();
+                ).bind(id, msgNumber, cleanAuthor, cleanPortrait, cleanContent, ipHash, cleanFp).run();
 
                 return new Response(JSON.stringify({ success: true, id, msgNumber }), { headers: corsHeaders });
             }

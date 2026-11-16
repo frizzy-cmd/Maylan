@@ -2,6 +2,19 @@
 
 var WHAT_CHANGED = [
 	{
+		version: "v1.0.11",
+		date: "November 16, 2026",
+		category: "Website",
+		title: "Zipping, Optimizations & Fixes",
+		changes: [
+			"Maylan: Added Download as ZIP to the Audio Index and Graphics Index! Tick the files you want, or download everything at once",
+			"Maylan: The homepage now shows the latest changelog entry!",
+			"Ot1C: OneMessage now also checks the username message & sprite on the server",
+			"Maylan: Static files (audio, graphics, etc.) are now served straight from Cloudflare, so previews and others should load a bit faster"
+		]
+	},
+	//
+	{
 		version: "v1.0.10",
 		date: "November 16, 2026",
 		category: "Website",
@@ -12,7 +25,7 @@ var WHAT_CHANGED = [
 			"OT1C: robots.txt and sitemap.xml are no longer sent to [alulaverify]. so search engines can actually crawl them. Oops!",
 			"Longley: Fixed OneMessage numbering aswell new messages always get the next number even after old ones get deleted",
 			"Longley: The OneMessage wall now only sends whatever the page shows",
-			"Longley: OT1C, Maylan: Additional bug fixes & improvements"
+			"Longley, OT1C, Maylan: Additional bug fixes & improvements"
 		]
 	},
 	//

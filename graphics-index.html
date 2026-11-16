@@ -11,6 +11,8 @@
 		<link rel="stylesheet" href="static/styles.css">
 		<script src="static/js/theme-switcher.js"></script>
 		<script src="static/js/site-announcement.js" defer></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+		<script src="static/js/zip-helper.js" defer></script>
 		<script src="static/js/graphics-index.js" defer></script>
 		<title>Graphics Index - Maylan's Homepage</title>
 
@@ -158,6 +160,51 @@
 				color: var(--header-subtitle);
 				margin-top: 6px;
 			}
+		.zip-bar {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 10px;
+				padding: 10px 12px;
+				margin-bottom: 12px;
+				background: rgba(18, 6, 28, 0.96);
+				border: 2px solid var(--box-border);
+				border-radius: 4px;
+				position: sticky;
+				top: 0;
+				z-index: 50;
+				font-size: 12pt;
+			}
+			.zip-btn {
+				background: var(--btn-bg);
+				color: #ffffff;
+				border: 0;
+				border-bottom: 3px solid var(--btn-border);
+				padding: 5px 12px;
+				font-family: Terminus, monospace;
+				font-size: 11pt;
+				cursor: pointer;
+				border-radius: 3px;
+			}
+			.zip-btn:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+			#zipStatus {
+				color: var(--header-subtitle);
+				font-size: 11pt;
+			}
+			.sel-box, .cat-sel {
+				width: 18px;
+				height: 18px;
+				cursor: pointer;
+				accent-color: var(--header-subtitle);
+				flex-shrink: 0;
+			}
+			.cat-sel {
+				margin-right: 8px;
+				vertical-align: middle;
+			}
 		</style>
 	</head>
 	<body>
@@ -188,6 +235,14 @@
 
 			<div style="font-size: 12pt; color: #aaa; margin-bottom: 12px;">
 				Counting a total of <strong id="resultCount" style="color: var(--header-subtitle);">0</strong> graphics
+			</div>
+
+			<div class="zip-bar">
+				<span id="zipCount">0 selected</span>
+				<button class="zip-btn" id="zipSelBtn" onclick="zipSelected()">Download selected (0)</button>
+				<button class="zip-btn" onclick="clearSelection()">Clear</button>
+				<button class="zip-btn" onclick="zipAll()">Download ALL</button>
+				<span id="zipStatus"></span>
 			</div>
 
 			<noscript>

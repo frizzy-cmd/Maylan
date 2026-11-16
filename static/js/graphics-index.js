@@ -1,6 +1,8 @@
 // graphics-index.js 
 
 var GRAPHICS_DATA = {};
+var SELECTED = {}; // 'Folder/file.png' -> { folder, file }
+var LAST_MATCHES = {}; // what each folder is showing right now (search filter)
 
 function escapeHtml(str) {
 	if (!str) return '';
@@ -51,6 +53,7 @@ function makeList(query, selectedFolder) {
 	var cleanFolder = selectedFolder || 'ALL';
 
 	var totalMatches = 0;
+	LAST_MATCHES = {};
 	var html = '';
 	var sortedFolders = Object.keys(GRAPHICS_DATA).sort();
 
@@ -78,12 +81,13 @@ function makeList(query, selectedFolder) {
 		}
 
 		totalMatches += folderMatches.length;
+		LAST_MATCHES[folderName] = folderMatches;
 
 		var isOpen = (cleanQuery.length > 0 || cleanFolder !== 'ALL') ? ' open' : '';
 		var arrowTxt = (isOpen !== '') ? '[ - ]' : '[ + ]';
 
 		html += '<div class="category-header" onclick="toggleCat(\'' + escapeHtml(folderName) + '\')">';
-		html += '  <span>📁 ' + escapeHtml(folderName) + ' <span style="font-size: 12pt; color: #aaa;">(' + folderMatches.length + ')</span></span>';
+		html += '  <span><input type="checkbox" class="cat-sel" data-folder="' + escapeHtml(folderName) + '" title="Select all in this folder" onclick="event.stopPropagation()"> 📁 ' + escapeHtml(folderName) + ' <span style="font-size: 12pt; color: #aaa;">(' + folderMatches.length + ')</span></span>';
 		html += '  <span id="catArrow_' + escapeHtml(folderName) + '">' + arrowTxt + '</span>';
 		html += '</div>';
 
@@ -96,6 +100,7 @@ function makeList(query, selectedFolder) {
 
 			html += '<div class="graphics-row">';
 			html += '  <div class="graphics-top-bar">';
+			html += '    <input type="checkbox" class="sel-box" data-folder="' + escapeHtml(folderName) + '" data-file="' + escapeHtml(fileName) + '"' + (SELECTED[folderName + '/' + fileName] ? ' checked' : '') + '>';
 			html += '    <div class="graphics-title">';
 			html += '      📄 ' + escapeHtml(fileName);
 			html += '    </div>';
@@ -124,6 +129,7 @@ function makeList(query, selectedFolder) {
 	}
 
 	container.innerHTML = html;
+	updateZipCount();
 }
 
 //  handles previewing img./
@@ -158,6 +164,57 @@ function togglePrev(folder, file, itemKey) {
 	};
 }
 
+// buildZip in zip-helper.js
+function gfxItem(folder, file) {
+	return {
+		url: 'static/graphicsindex/' + encodeURIComponent(folder) + '/' + encodeURIComponent(file),
+		path: folder + '/' + file
+	};
+}
+
+function updateZipCount() {
+	var n = Object.keys(SELECTED).length;
+	var cnt = document.getElementById('zipCount');
+	var btn = document.getElementById('zipSelBtn');
+	if (cnt) cnt.textContent = n + ' selected';
+	if (btn) btn.textContent = 'Download selected (' + n + ')';
+
+	var heads = document.querySelectorAll('.cat-sel');
+	for (var i = 0; i < heads.length; i++) {
+		var f = heads[i].getAttribute('data-folder');
+		var list = LAST_MATCHES[f] || [];
+		var on = 0;
+		for (var j = 0; j < list.length; j++) {
+			if (SELECTED[f + '/' + list[j]]) on++;
+		}
+		heads[i].checked = list.length > 0 && on === list.length;
+		heads[i].indeterminate = on > 0 && on < list.length;
+	}
+}
+
+function zipSelected() {
+	var items = [];
+	for (var k in SELECTED) items.push(gfxItem(SELECTED[k].folder, SELECTED[k].file));
+	buildZip(items, 'Maylan-OneShot-graphics.zip');
+}
+
+function zipAll() {
+	var items = [];
+	for (var folder in GRAPHICS_DATA) {
+		var files = GRAPHICS_DATA[folder] || [];
+		for (var i = 0; i < files.length; i++) items.push(gfxItem(folder, files[i]));
+	}
+	buildZip(items, 'Maylan-OneShot-graphics.zip');
+	// name of zip when download
+}
+
+function clearSelection() {
+	SELECTED = {};
+	var boxes = document.querySelectorAll('.sel-box');
+	for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+	updateZipCount();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	var searchInput = document.getElementById('graphicsSearch');
 	var folderFilter = document.getElementById('folderFilter');
@@ -169,6 +226,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	if (searchInput) searchInput.addEventListener('input', updateFilter);
+
+	// delegated bc the list rebuilt on every search
+	document.addEventListener('change', function(e) {
+		var t = e.target;
+		if (!t || typeof t.className !== 'string') return;
+
+		if (t.className.indexOf('sel-box') !== -1) {
+			var fo = t.getAttribute('data-folder');
+			var fi = t.getAttribute('data-file');
+			if (t.checked) SELECTED[fo + '/' + fi] = { folder: fo, file: fi };
+			else delete SELECTED[fo + '/' + fi];
+			updateZipCount();
+		}
+		else if (t.className.indexOf('cat-sel') !== -1) {
+			var f = t.getAttribute('data-folder');
+			var list = LAST_MATCHES[f] || [];
+			for (var i = 0; i < list.length; i++) {
+				if (t.checked) SELECTED[f + '/' + list[i]] = { folder: f, file: list[i] };
+				else delete SELECTED[f + '/' + list[i]];
+			}
+			// sync the boxes of that folder
+			var boxes = document.querySelectorAll('.sel-box');
+			for (var j = 0; j < boxes.length; j++) {
+				if (boxes[j].getAttribute('data-folder') !== f) continue;
+				boxes[j].checked = !!SELECTED[f + '/' + boxes[j].getAttribute('data-file')];
+			}
+			updateZipCount();
+		}
+	});
 	if (folderFilter) folderFilter.addEventListener('change', updateFilter);
 
 	// WE GET manifest.json

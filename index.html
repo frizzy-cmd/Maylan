@@ -38,6 +38,64 @@
 		<script src="static/js/site-announcement.js" defer></script>
 		<script src="static/js/daily-fact.js" defer></script>
 		<script src="static/js/secret.js" defer></script>
+		<script src="static/js/changelog.js" defer></script>
+		<script src="static/js/latest-changelog.js" defer></script>
+		<!-- woah.. lots of scripts here -->
+		<style>
+			#latestChangelog {
+				width: 628px;
+				margin: 32px auto;
+			}
+			#latestChangelog:empty {
+				display: none;
+			}
+			.lc-card {
+				padding: 16px 32px;
+				border: 4px solid var(--box-border);
+				background: var(--box-bg);
+				box-shadow: 0px 0px 6px 2px var(--box-shadow), var(--box-shadow) 0px 0px 32px inset;
+			}
+			.lc-head {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin-bottom: 8px;
+			}
+			.lc-ver {
+				background: var(--box-border);
+				color: var(--header-subtitle);
+				padding: 4px 10px;
+				font-size: 12pt;
+				font-weight: bold;
+				border-radius: 4px;
+				border: 1px solid var(--header-subtitle);
+			}
+			.lc-title {
+				color: #ffffff;
+				font-size: 14pt;
+				margin-left: 8px;
+			}
+			.lc-date {
+				font-size: 10pt;
+				color: #aaa;
+			}
+			.lc-list {
+				margin: 8px 0 12px 0;
+				padding-left: 20px;
+				color: #e0d0e0;
+				font-size: 12pt;
+				line-height: 1.6;
+			}
+			.lc-list li {
+				margin-bottom: 4px;
+			}
+			@media screen and (max-width: 750px) {
+				#latestChangelog { width: auto; }
+				.lc-card { border-left: 0; border-right: 0; }
+			}
+		</style>
 		<title>Maylan's Homepage</title>
 	</head>
 	<body>
@@ -96,6 +154,8 @@
 
 			<div id="githubCommitContainer"></div>
 		</div>
+
+		<div id="latestChangelog"></div>
 
 		<div id="footer">
 			This website was made by <a href="https://github.com/frizzy-cmd" target="_blank">Maylan</a> | 
