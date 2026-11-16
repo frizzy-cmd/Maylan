@@ -10,7 +10,9 @@ var WHAT_CHANGED = [
 			"Maylan: Added Download as ZIP to the Audio Index and Graphics Index! Tick the files you want, or download everything at once",
 			"Maylan: The homepage now shows the latest changelog entry!",
 			"Ot1C: OneMessage now also checks the username message & sprite on the server",
-			"Maylan: Static files (audio, graphics, etc.) are now served straight from Cloudflare, so previews and others should load a bit faster"
+			"Maylan: Static files (audio, graphics, etc.) are now served straight from Cloudflare, so previews and others should load a bit faster",
+			"Maylan: Deprecated isthatagubby.html from homepage",
+			"Maylan: Updated legal.html a bit"
 		]
 	},
 	//
