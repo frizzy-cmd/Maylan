@@ -28,11 +28,10 @@
 		<meta name="twitter:description" content="Features game mods, such as Alula Editor, Cedric Reader, and Calamus Toolkit for OneShot! & other cool stuff you should check out.">
 		<meta name="twitter:image" content="https://pfp.teaa.workers.dev">
 
-		<!-- <link rel="icon" type="image/jpeg" href="static/img/pf1.jpg"> -->
 		<link rel="icon" type="image/png" href="https://pfp.teaa.workers.dev">
 		<link rel="stylesheet" href="static/styles.css">
 
-		<!-- SCRIPOTS -->
+		<!-- SCRIPTS -->
 		<script src="static/js/theme-switcher.js"></script>
 		<script src="static/js/github-tracker.js" defer></script>
 		<script src="static/js/site-announcement.js" defer></script>
@@ -40,17 +39,212 @@
 		<script src="static/js/secret.js" defer></script>
 		<script src="static/js/changelog.js" defer></script>
 		<script src="static/js/latest-changelog.js" defer></script>
-		<!-- woah.. lots of scripts here -->
+
 		<style>
+			.gh-layout {
+				max-width: 1360px;
+				width: 95%;
+				margin: 24px auto;
+				display: grid;
+				grid-template-columns: 260px minmax(0, 1fr) 280px;
+				gap: 20px;
+				align-items: start;
+			}
+
+			.panel-card {
+				padding: 20px;
+				border: 4px solid var(--box-border);
+				background: var(--box-bg);
+				box-shadow: 0px 0px 6px 2px var(--box-shadow), var(--box-shadow) 0px 0px 32px inset;
+				box-sizing: border-box;
+			}
+			.profile-avatar-wrap {
+				position: relative;
+				width: 100%;
+				max-width: 210px;
+				margin: 0 auto 16px auto;
+			}
+			.profile-avatar {
+				width: 100%;
+				aspect-ratio: 1 / 1;
+				border-radius: 50%;
+				border: 3px solid var(--box-border);
+				object-fit: cover;
+				display: block;
+				background: #100020;
+			}
+			.profile-name {
+				font-size: 20pt;
+				color: #ffffff;
+				margin: 0;
+				line-height: 1.2;
+			}
+			.profile-name-other-ig {
+				font-size: 13pt;
+				color: #aaa;
+				margin: 2px 0 12px 0;
+			}
+			.profile-btn {
+				display: block;
+				width: 100%;
+				text-align: center;
+				padding: 7px 10px;
+				background: var(--input-bg);
+				border: 2px solid var(--box-border);
+				color: var(--header-subtitle) !important;
+				text-decoration: none;
+				font-size: 11pt;
+				border-radius: 4px;
+				box-sizing: border-box;
+				margin-bottom: 14px;
+			}
+			.profile-btn:hover {
+				background: var(--box-border);
+			}
+			.profile-meta {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				font-size: 10.5pt;
+				color: #d0c0d0;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				border-top: 1px dashed var(--box-border);
+				padding-top: 12px;
+			}
+			.profile-meta li {
+				word-break: break-word;
+			}
+			.readme-header-bar {
+				font-size: 10.5pt;
+				color: #aaa;
+				border-bottom: 1px solid var(--box-border);
+				padding-bottom: 8px;
+				margin-bottom: 16px;
+				display: flex;
+				justify-content: space-between;
+			}
+			.rat-title {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 22pt;
+				color: #ffffff;
+				margin: 0 0 12px 0;
+				border-bottom: 1px solid var(--box-border);
+				padding-bottom: 8px;
+			}
+			.badge-row {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin: 10px 0 14px 0;
+			}
+			.sec-heading {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 16pt;
+				color: var(--header-subtitle);
+				border-bottom: 1px solid var(--box-border);
+				padding-bottom: 6px;
+				margin: 24px 0 12px 0;
+				text-align: left;
+				clear: both;
+			}
+			.readme-list {
+				padding-left: 20px;
+				line-height: 1.6;
+				font-size: 11.5pt;
+				color: #e6dce6;
+			}
+			.readme-list li {
+				margin-bottom: 10px;
+			}
+			.stack-right {
+				text-align: right;
+				margin-top: 14px;
+			}
+			.stack-right .sec-heading {
+				justify-content: flex-end;
+			}
+			.sites-table-wrap {
+				overflow-x: auto;
+			}
+			.sites-table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 10.5pt;
+			}
+			.sites-table th, .sites-table td {
+				border: 1px solid var(--box-border);
+				padding: 8px 10px;
+				text-align: left;
+			}
+			.sites-table th {
+				background: var(--input-bg);
+				color: var(--header-subtitle);
+			}
+			.status-online {
+				display: inline-block;
+				padding: 2px 6px;
+				border-radius: 3px;
+				font-size: 9pt;
+				background: #1b5e20;
+				color: #a5d6a7;
+				border: 1px solid #2e7d32;
+			}
+			.status-dev {
+				display: inline-block;
+				padding: 2px 6px;
+				border-radius: 3px;
+				font-size: 9pt;
+				background: #371a45;
+				color: #d0b0e0;
+				border: 1px solid var(--box-border);
+			}
+
+			.proj-link-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 8px 10px;
+				background: var(--input-bg);
+				border: 1px solid var(--box-border);
+				border-left: 2px solid var(--box-border);
+				border-radius: 4px;
+				text-decoration: none;
+				font-size: 11pt;
+				transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+			}
+			.proj-link-item:hover {
+				background: var(--box-border);
+				border-color: var(--header-subtitle);
+				border-left-color: currentColor;
+				transition-duration: 0.02s;
+			}
+			.proj-link-item:active {
+				transform: translateX(2px) scale(0.995);
+				transition-duration: 0.02s;
+			}
+			.proj-tag {
+				font-size: 9pt;
+				color: var(--header-subtitle);
+			}
+			.proj-link-item:hover .proj-tag {
+				color: inherit; 
+				transform: translateX(-2px);
+			}
 			#latestChangelog {
-				width: 628px;
-				margin: 32px auto;
+				width: 100%;
+				margin: 20px 0 0 0;
 			}
 			#latestChangelog:empty {
 				display: none;
 			}
 			.lc-card {
-				padding: 16px 32px;
+				padding: 16px 20px;
 				border: 4px solid var(--box-border);
 				background: var(--box-bg);
 				box-shadow: 0px 0px 6px 2px var(--box-shadow), var(--box-shadow) 0px 0px 32px inset;
@@ -67,14 +261,14 @@
 				background: var(--box-border);
 				color: var(--header-subtitle);
 				padding: 4px 10px;
-				font-size: 12pt;
+				font-size: 11pt;
 				font-weight: bold;
 				border-radius: 4px;
 				border: 1px solid var(--header-subtitle);
 			}
 			.lc-title {
 				color: #ffffff;
-				font-size: 14pt;
+				font-size: 13pt;
 				margin-left: 8px;
 			}
 			.lc-date {
@@ -85,15 +279,34 @@
 				margin: 8px 0 12px 0;
 				padding-left: 20px;
 				color: #e0d0e0;
-				font-size: 12pt;
-				line-height: 1.6;
+				font-size: 11pt;
+				line-height: 1.5;
 			}
-			.lc-list li {
-				margin-bottom: 4px;
+
+			@media screen and (max-width: 1120px) {
+				.gh-layout {
+					grid-template-columns: 240px minmax(0, 1fr);
+				}
+				.right-sidebar {
+					grid-column: 1 / -1;
+				}
+				.right-sidebar .proj-links {
+					display: grid;
+					grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+				}
 			}
-			@media screen and (max-width: 750px) {
-				#latestChangelog { width: auto; }
-				.lc-card { border-left: 0; border-right: 0; }
+
+			@media screen and (max-width: 760px) {
+				.gh-layout {
+					grid-template-columns: 1fr;
+					width: 94%;
+				}
+				.stack-right {
+					text-align: left;
+				}
+				.stack-right .sec-heading {
+					justify-content: flex-start;
+				}
 			}
 		</style>
 		<title>Maylan's Homepage</title>
@@ -106,60 +319,198 @@
 			<div id="subtitle">Homepage</div>
 		</div>
 
-		<div id="message">
-			<h3>Welcome to my homepage!</h3>
-			Welcome to my homepage! Here, you'll find projects made by me (Maylan, or call me May/Ace) on here, For games, for standard use, everything!
-			<br><br>
-			I recommend you checking out my <a href="https://github.com/frizzy-cmd" target="_blank">GitHub</a> for other projects i dont have listed here, since this is just mostly gonna be related to modifying games and such.
-			<br><br>
-			I mostly post my game mods and such here, since GitHub ToS apparently doesn't allow it? Dunno. dont wanna risk it.
+		<div class="gh-layout">
+			<!-- profile on left side -->
+			<aside class="panel-card left-sidebar">
+				<div class="profile-avatar-wrap">
+					<img src="https://pfp.teaa.workers.dev" alt="Maylan Avatar" class="profile-avatar">
+				</div>
+				<h1 class="profile-name">Maylan</h1>
+				<div class="profile-name-other-ig">maylan.html · he/him</div>
+
+				<a href="about-me.html" class="profile-btn">Visit deprecated about</a>
+
+				<ul class="profile-meta">
+					<li>❤️ Software Engineering</li>
+					<li>📍 Around South East Asia</li>
+					<li>🕒 <span id="localTimeDisplay">undef:ined</span> (UTC +08:00)</li>
+					<li>🌐 <a href="https://maylan.teaa.workers.dev/" target="_blank">Website</a></li>
+					<li>✉️ <a href="mailto:support.kipsite@gmail.com">support.kipsite@gmail.com [General support]</a></li>
+					<li>🔗 <a href="https://github.com/frizzy-cmd" target="_blank">GitHub</a></li>
+					<li>🔗 <a href="https://codeberg.org/kipkat" target="_blank">Codeberg</a></li>
+					<li>🔗 <a href="https://discordapp.com/users/946316462182789130" target="_blank">Discord</a></li>
+					<li>🔗 <a href="https://www.roblox.com/users/3005052340/profile" target="_blank">Roblox</a></li>
+				</ul>
+			</aside>
+
+			<!-- center -->
+			<main class="center-feed">
+				<div class="panel-card">
+					<div class="readme-header-bar">
+						<span>Homepage</span>
+						<span>index.html</span>
+					</div>
+
+					<h2 class="rat-title">
+						<img src="https://cdn.discordapp.com/emojis/1240055805772955779.webp?size=96" width="38" height="38" alt="niko">
+						Hey there!
+					</h2>
+
+					<div class="badge-row">
+						<img src="https://img.shields.io/badge/OS-Windows_11_IoT_LTSC-0078D4?style=flat-square&logo=windows&logoColor=white" alt="Windows">
+						<img src="https://img.shields.io/badge/OS-Debian_13-A81D33?style=flat-square&logo=debian&logoColor=white" alt="Debian">
+						<img src="https://img.shields.io/badge/Editor-VSCode-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white" alt="VS Code">
+					</div>
+
+					<p style="font-size: 12pt; line-height: 1.5;">
+						<strong>I'm Maylan. You can call me</strong> <i>May (or preferrably Ace)</i>!<br>
+						<em>I make stuff &amp; things :)</em>
+					</p>
+
+					<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+						<div style="flex: 1; min-width: 280px;">
+							<h3 class="sec-heading" style="margin-top: 10px;">
+								<img src="https://cdn.discordapp.com/emojis/836289639735492691.webp?size=96" width="34" height="34" alt="thonk">
+								What am I up to?
+							</h3>
+
+							<ul class="readme-list">
+								<li><strong>Web development:</strong> I like making websites. It's usually my main thing, It's compatible with everything and only needs a browser! (usually) I host them on Cloudflare Workers/Pages, I rarely use databases unless i'm making something big, so that's that.</li>
+								<li><strong>Game development &amp; Game modding:</strong> Tinkering with Luau, C++, C, and sometimes with game engines too! You can <em>probably</em> know me by me creating <a href="calamus-toolkit.html">Calamus Toolkit</a>, it's a mod menu sorta thing for OneShot.</li>
+								<li><strong>Systems &amp; Reverse-engineering:</strong> I also make stuff! (with real code! and not just web development..) Hot take, but usually <strong>Python is my go-to</strong> as its good for testing small stuff, but <strong>for bigger scale projects</strong>, or <strong>projects that can't go with Python</strong>, I'd go with <em>Rust</em>, <em>C++</em> or <em>C</em> (based on the project)</li>
+								<li><strong><em>Please</em></strong> view the projects panel on the right side for mods and tools that I won't put on GitHub! (psst.. ToS..)</li>
+							</ul>
+						</div>
+
+						<div style="flex-shrink: 0;">
+							<img src="static/img/naz.png" style="width: 290px; max-width: 100%; display: block;" alt="Character Art" onerror="this.style.display='none'">
+						</div>
+					</div>
+
+					<p style="font-size: 11.5pt; color: #d8c8d8; line-height: 1.5; margin-top: 16px;">
+						Although, I don't really make stuff on GitHub, since I have no idea what to make &amp; <strong>I mainly focus on <em>web development</em></strong>, I still have some stuff in my pinned repos!
+					</p>
+					<p style="font-size: 11pt; color: #aaa;">
+						<i>But anyways, That's what I can say about myself on a technical aspect!</i>
+					</p>
+
+					<!-- widgets -->
+					<h3 class="sec-heading">Discord &amp; Current Status</h3>
+					<div style="text-align: center; margin: 14px 0;">
+						<a href="https://discord.com/users/946316462182789130" target="_blank">
+							<img src="https://lanyard.cnrad.dev/api/946316462182789130?theme=dark&bg_color=282c34&hideDiscrim=true" alt="discord" style="max-width: 100%; border-radius: 6px;">
+						</a>
+					</div>
+
+					<h3 class="sec-heading">Developer Stack</h3>
+					<div>
+						<a href="https://skillicons.dev" target="_blank">
+							<img src="https://skillicons.dev/icons?i=py,lua,ruby,rust,cpp,c,cs,dotnet,html,css,js" alt="Languages and etc" style="max-width: 100%;">
+						</a>
+					</div>
+
+					<div class="stack-right">
+						<h3 class="sec-heading">Tech Stack</h3>
+						<a href="https://skillicons.dev" target="_blank">
+							<img src="https://skillicons.dev/icons?i=windows,linux,debian,git,vscode,sublime,discord,bots,robloxstudio,github,supabase,cloudflare,workers" alt="Tech and etc" style="max-width: 100%;">
+						</a>
+					</div>
+
+					<h3 class="sec-heading">Statistics</h3>
+					<div style="text-align: center;">
+						<img src="https://github-activity-chart.vercel.app/graph?username=frizzy-cmd&theme=one-dark&bg_color=282c34&hide_border=true" alt="frizzy-cmd's github activity graph" style="max-width: 100%; border-radius: 4px;">
+						<br><br>
+						<img src="https://github-stats-extended.vercel.app/api/top-langs/?username=frizzy-cmd&theme=dark&layout=compact&size_weight=1&count_weight=0" alt="Most used languages" style="max-width: 100%;">
+					</div>
+
+					<h3 class="sec-heading">Sites I own</h3>
+					<div class="sites-table-wrap">
+						<table class="sites-table">
+							<thead>
+								<tr>
+									<th>Site</th>
+									<th>Description</th>
+									<th style="text-align: center;">Status</th>
+									<th style="text-align: center;">Stack</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><a href="https://maylan.teaa.workers.dev/" target="_blank"><strong>Maylan</strong></a></td>
+									<td>Personal homepage that hosts projects &amp; stuff</td>
+									<td style="text-align: center;"><span class="status-online">Online</span></td>
+									<td style="text-align: center;">Static &amp; dynamic workers</td>
+								</tr>
+								<tr>
+									<td><a href="https://savedeltarune.teaa.workers.dev/" target="_blank"><strong>SaveDeltarune</strong></a></td>
+									<td>Media archive of some 'problematic' whatnot videos on DELTARUNE</td>
+									<td style="text-align: center;"><span class="status-online">Online</span></td>
+									<td style="text-align: center;">Static &amp; dynamic workers</td>
+								</tr>
+								<tr>
+									<td><a href="https://pfp.teaa.workers.dev" target="_blank"><strong>pfp</strong></a></td>
+									<td>A cdn sorta-thing, this site is used when i use my pfp in sites</td>
+									<td style="text-align: center;"><span class="status-online">Online</span></td>
+									<td style="text-align: center;">Worker only</td>
+								</tr>
+								<tr>
+									<td><a href="https://etem.pages.dev" target="_blank"><strong>eTem</strong></a></td>
+									<td>eMudhra lol</td>
+									<td style="text-align: center;"><span class="status-online">Online</span></td>
+									<td style="text-align: center;">Static pages</td>
+								</tr>
+								<tr>
+									<td><a href="https://oneapple.pages.dev" target="_blank"><strong>OneApple</strong></a></td>
+									<td>Bad Apple!! but OneShot spritefaces</td>
+									<td style="text-align: center;"><span class="status-online">Online</span></td>
+									<td style="text-align: center;">Static pages</td>
+								</tr>
+								<tr>
+									<td><strong>OneShotWebRemake</strong></td>
+									<td>Remaking OneShot in TypeScript (like the core mechanics)</td>
+									<td style="text-align: center;"><span class="status-dev">Development</span></td>
+									<td style="text-align: center;">TypeScript</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div id="latestChangelog"></div>
+			</main>
+
+			<!-- projects right -->
+			<aside class="panel-card right-sidebar">
+				<h3 class="proj-group-title">Current Projects</h3>
+				<div class="proj-links">
+					<a href="ling-launcher.html" class="proj-link-item">Ling Launcher <span class="proj-tag">[!!]</span></a>
+					<a href="p-settings-generate.html" class="proj-link-item">Alula Editor <span class="proj-tag">Save editor</span></a>
+					<a href="cedric-reader.html" class="proj-link-item">Cedric Reader <span class="proj-tag">Save reader</span></a>
+					<a href="calamus-toolkit.html" class="proj-link-item">Calamus Toolkit <span class="proj-tag">Toolkit</span></a>
+					<a href="rue-studio.html" class="proj-link-item">Rue Studio <span class="proj-tag">Scene maker</span></a>
+					<a href="onepresence.html" class="proj-link-item">OnePresence <span class="proj-tag">Discord RPC</span></a>
+					<a href="magpie-collector.html" class="proj-link-item">Magpie Collector <span class="proj-tag">Logger</span></a>
+				</div>
+
+				<h3 class="proj-group-title">Community</h3>
+				<div class="proj-links">
+					<a href="onemsg.html" class="proj-link-item">OneMessage <span class="proj-tag">Post a message</span></a>
+					<a href="audio-index.html" class="proj-link-item">Audio Index <span class="proj-tag">Audio files</span></a>
+					<a href="graphics-index.html" class="proj-link-item">Graphics Index <span class="proj-tag">Graphic files</span></a>
+					<a href="changelog.html" class="proj-link-item">Changelog <span class="proj-tag">Updates</span></a>
+					<a href="twm-diagnostics.html" class="proj-link-item">TWM Diagnostics <span class="proj-tag">Debugger</span></a>
+					<a href="settings.html" class="proj-link-item">Settings <span class="proj-tag">Configuration</span></a>
+				</div>
+
+				<div style="font-size: 10pt; color: #aaa; margin-bottom: 12px;">..and more coming soon..</div>
+
+				<div id="githubCommitContainer"></div>
+			</aside>
 		</div>
-
-		<div id="box">
-			<h3 id="Content">Community</h3>
-			<a href="about-me.html">About Maylan</a>
-			<br><br>
-			<a href="changelog.html">Changelog</a>
-			<br><br>
-			<a href="settings.html">Settings</a>
-			<br><br>
-			<a href="twm-diagnostics.html">Diagnostics</a>
-			<br><br>
-			<br><br>
-			<a href="onemsg.html">Leave your one and only message</a>
-			<br><br>
-			<a href="audio-index.html">View the Audio Index</a>
-			<br><br>
-			<a href="graphics-index.html">View the Graphics Index</a>
-			<br><br>
-			
-			<h3 id="Content">Available projects</h3>
-			<a href="ling-launcher.html">Go to Ling Launcher [!!]</a>
-			<br><br>
-			<a href="p-settings-generate.html">Go to Alula Editor</a>
-			<br><br>
-			<a href="cedric-reader.html">Go to Cedric Reader</a>
-			<br><br>
-			<a href="calamus-toolkit.html">Go to Calamus Toolkit</a>
-			<br><br>
-			<a href="rue-studio.html">Go to Rue Studio</a>
-			<br><br>
-			<a href="onepresence.html">Go to OnePresence</a>
-			<br><br>
-			<a href="magpie-collector.html">Go to Magpie Collector</a>
-			<br><br>
-			<!-- <a href="isthatagubby.html">Go to isthatagubby</a>
-			<br><br> -->
-			..and more coming soon..
-
-			<div id="githubCommitContainer"></div>
-		</div>
-
-		<div id="latestChangelog"></div>
 
 		<div id="footer">
 			This website was made by <a href="https://github.com/frizzy-cmd" target="_blank">Maylan</a> | 
-            <a href="legal.html">Legal</a> | 
+			<a href="legal.html">Legal</a> | 
 			<a href="https://github.com/frizzy-cmd/NRHomepage" target="_blank">Source Code</a>
 
 			<div class="theme-picker">
@@ -177,5 +528,31 @@
 			<br><br>
 			Message support.kipsite@gmail.com for any inquiries/copyright issues
 		</div>
+
+		<script>
+			function updTm() {
+				var el = document.getElementById('localTimeDisplay');
+				if (!el) return;
+				var now = new Date();
+				var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+				var myt = new Date(utc + (3600000 * 8));
+				var h = String(myt.getHours()).padStart(2, '0');
+				var m = String(myt.getMinutes()).padStart(2, '0');
+				el.innerText = h + ':' + m;
+			}
+			updTm();
+			setInterval(updTm, 15000);
+
+			// for phone users and etc
+			(function() {
+				var isMobile = window.innerWidth <= 760 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+				if (isMobile && !sessionStorage.getItem('is_aware_that_projects_is_down_below_cuz_on_mobile')) {
+					sessionStorage.setItem('is_aware_that_projects_is_down_below_cuz_on_mobile', '1');
+					setTimeout(function() {
+						alert("Hey, seems like you're on a mobile device. Projects are listed way below, so scroll down for projects, or you can read my lovely homepage! Thanks for visiting!");
+					}, 300);
+				}
+			})();
+		</script>
 	</body>
 </html>

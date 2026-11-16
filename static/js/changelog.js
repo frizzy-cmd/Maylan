@@ -2,6 +2,16 @@
 
 var WHAT_CHANGED = [
 	{
+		version: "v2.0.0",
+		date: "November 16, 2026 2:27 PM",
+		category: "Website",
+		title: "index.html Overhaul",
+		changes: [
+			"Maylan: Overhauled how index.html looks!",
+			"OT1C & Longley: Contributed"
+		]
+	},
+	{
 		version: "v1.0.11",
 		date: "November 16, 2026",
 		category: "Website",
