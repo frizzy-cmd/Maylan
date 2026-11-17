@@ -2,6 +2,15 @@
 
 var WHAT_CHANGED = [
 	{
+		version: "v2.0.1",
+		date: "November 17, 2027",
+		category: "Website",
+		title: "Legal",
+		changes: [
+			"Maylan: Add a button in the projects panel for the Legal webpage"
+		]
+	},
+	{
 		version: "v2.0.0",
 		date: "November 16, 2026 2:27 PM",
 		category: "Website",
@@ -40,6 +49,19 @@ var WHAT_CHANGED = [
 			"Longley, OT1C, Maylan: Additional bug fixes & improvements"
 		]
 	},
+	{
+		version: "v0.5.5-GA",
+		date: "November 13, 2026",
+		category: "Project",
+		title: "Calamus Toolkit update",
+		changes: [
+			"This changelog was supposed to be added on Nov 13, but i forgot this page existed. This changelog was added on November 17.",
+			"Changed some occurences of Kip to Maylan",
+			"Add some faces to some dialogues that didnt have faces",
+			"Changed some dialogues",
+			"Made powershell window on startup that checks for updates slightly shorter",
+		]
+	},
 	//
 	{
 		version: "v1.0.9",
@@ -49,6 +71,16 @@ var WHAT_CHANGED = [
 		changes: [
 			"All occurences of Nightregion have been changed to Maylan!",
 			"Additional bug fixes & improvements"
+		]
+	},
+	{
+		version: "[No version tag yet]",
+		date: "November 7, 2026",
+		category: "Project",
+		title: "OnePresence",
+		changes: [
+			"This changelog was supposed to be added on Nov 7, but i forgot this page existed. This changelog was added on November 17.",
+			"Initial commit of OnePresence!"
 		]
 	},
 	{
