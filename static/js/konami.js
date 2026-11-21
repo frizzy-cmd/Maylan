@@ -15,7 +15,7 @@
         if (key === expectedKey) {
             konamiIndex++;
             if (konamiIndex === konamiSequence.length) {
-                window.location.href = 'static/img/bow.gif';
+                window.location.href = 'static/img/The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The it the it The.txt';
             }
         } else {
             konamiIndex = 0;

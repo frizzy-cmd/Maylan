@@ -314,6 +314,12 @@
 					justify-content: flex-start;
 				}
 			}
+
+			 .no-select {
+      				pointer-events: none;
+     				 user-select: none;
+      				-webkit-user-select: none;
+    				}
 		</style>
 		<title>Maylan's Homepage</title>
 	</head>
@@ -322,7 +328,6 @@
 			<a href="index.html" style="text-decoration: none;">
 				<img id="logo" src="static/img/logo.png" alt="OneShot Logo" title="Go to Homepage">
 			</a>
-			<div id="subtitle">Homepage</div>
 		</div>
 
 		<div class="gh-layout">
@@ -334,9 +339,8 @@
 				<h1 class="profile-name">Maylan</h1>
 				<h5 class="profile-name-other-ig">maylan.html · he/him</h5>
 				<!-- im using <h5> too make it centered its a weird hack but ok -->
-				<!-- <div class="profile-bio"></div> -->
-				 <!-- Make use of this or i'm killing you. -->
-				<!-- relax -->
+				<div class="profile-bio">that shitty ass bg removal i did is frying me im not making that selectable<br><br> also that is machine learning upscaling not gen ai</div>
+				<!-- found use of it -->
 
 				<a href="about-me.html" class="profile-btn">Visit deprecated about</a>
 
@@ -393,7 +397,7 @@
 						</div>
 
 						<div style="flex-shrink: 0;">
-							<img src="static/img/cir.png" style="width: 290px; max-width: 100%; display: block;" alt="cirno" onerror="this.style.display='none'">
+							<img src="static/img/maj.png" style="width: 290px; max-width: 100%; display: block;" alt="uh oh" draggable="false" class="no-select" onerror="this.style.display='none'">
 						</div>
 					</div>
 
