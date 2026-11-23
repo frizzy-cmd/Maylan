@@ -179,7 +179,6 @@ a:focus-visible {
     border-bottom-color: var(--header-subtitle);
 }
 
-button,
 .btn,
 #box input[type=button],
 #box input[type=submit] {
@@ -202,14 +201,12 @@ button,
     cursor: pointer;
 }
 
-button:hover,
 .btn:hover,
 #box input[type=button]:hover,
 #box input[type=submit]:hover {
     filter: brightness(1.12);
 }
 
-button:active,
 .btn:active,
 #box input[type=button]:active,
 #box input[type=submit]:active {
@@ -220,7 +217,6 @@ button:active,
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.45);
 }
 
-button:focus-visible,
 .btn:focus-visible,
 #box input[type=button]:focus-visible,
 #box input[type=submit]:focus-visible {
@@ -357,7 +353,6 @@ body.access-high-contrast, body.access-high-contrast * {
 	box-shadow: none !important;
 	filter: none !important;
 }
-body.access-high-contrast button,
 body.access-high-contrast .btn,
 body.access-high-contrast #box input[type=button],
 body.access-high-contrast #box input[type=submit] {
