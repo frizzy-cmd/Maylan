@@ -2,6 +2,20 @@
 
 var WHAT_CHANGED = [
 	{
+        version: "v2.0.2",
+        date: "November 23, 2027",
+        category: "Website",
+        title: "Tool & some fixes",
+        changes: [
+            "Maylan: Added a textbox generator! It's very, almost 1:1 accuracy for OneShot dialogues.",
+            "OT1C: Contributed to textbox generator",
+            "Maylan: Updated legal.html courtesy of new textbox generator (under Apache 2.0)",
+            "Maylan: Updated metatags in homepage",
+			"Maylan: Updated some <noscript> UIs"
+
+        ]
+    },
+	{
 		version: "v2.0.1",
 		date: "November 17, 2027",
 		category: "Website",

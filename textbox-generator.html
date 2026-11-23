@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	    <meta charset="UTF-8">
-		<meta name="title" content="Maylan's Homepage">
-		<meta name="description" content="A simple OneShot textbox generator, and very accurate too!">
-		<meta name="keywords" content="oneshot, save maker, save editor, modding, p-settings, save file, rpg maker, alula editor, cedric reader, calamus toolkit">
-		<meta name="language" content="EN">
-		<meta name="owner" content="maylan">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="theme-color" content="#9664ff">
+	<meta charset="UTF-8">
+	<meta name="title" content="Maylan's Homepage">
+	<meta name="description" content="A simple OneShot textbox generator, and very accurate too!">
+	<meta name="keywords"
+		content="oneshot, save maker, save editor, modding, p-settings, save file, rpg maker, alula editor, cedric reader, calamus toolkit">
+	<meta name="language" content="EN">
+	<meta name="owner" content="maylan">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#9664ff">
 
-		<!-- OpenGraph / Discord Metatags -->
-		<meta property="og:type" content="website">
-		<meta property="og:site_name" content="Homepage">
-		<meta property="og:title" content="Maylan's Homepage">
-		<meta property="og:description" content="A simple OneShot textbox generator, and very accurate too!">
-		<meta property="og:url" content="https://maylan.teaa.workerss.dev/">
-		<meta property="og:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
-		<meta property="og:image:secure_url" content="https://maylan.teaa.workers.dev/static/img/icon.png">
-		<meta property="og:image:type" content="image/jpeg">
-		<meta property="og:locale" content="en_US">
+	<!-- OpenGraph / Discord Metatags -->
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Homepage">
+	<meta property="og:title" content="Maylan's Homepage">
+	<meta property="og:description" content="A simple OneShot textbox generator, and very accurate too!">
+	<meta property="og:url" content="https://maylan.teaa.workerss.dev/">
+	<meta property="og:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+	<meta property="og:image:secure_url" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:locale" content="en_US">
 
-		<!-- Twitter & discord Card Layout -->
-		<meta name="twitter:card" content="summary">
-		<meta name="twitter:url" content="https://maylan.teaa.workerss.dev/">
-		<meta name="twitter:title" content="Maylan's Homepage">
-		<meta name="twitter:description" content="A simple OneShot textbox generator, and very accurate too!">
-		<meta name="twitter:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+	<!-- Twitter & discord Card Layout -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:url" content="https://maylan.teaa.workerss.dev/">
+	<meta name="twitter:title" content="Maylan's Homepage">
+	<meta name="twitter:description" content="A simple OneShot textbox generator, and very accurate too!">
+	<meta name="twitter:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
 
-		<link rel="icon" type="image/png" href="https://maylan.teaa.workers.dev/static/img/icon.png">
-		<link rel="stylesheet" href="static/styles.css">
-        <title>Textbox Generator - Maylan's Homepage</title>
+	<link rel="icon" type="image/png" href="https://maylan.teaa.workers.dev/static/img/icon.png">
+	<link rel="stylesheet" href="static/styles.css">
+	<title>Textbox Generator - Maylan's Homepage</title>
 
-        <script src="static/js/theme-switcher.js"></script>
-		<script src="static/js/alert-sound.js" defer></script>
-        <script src="static/js/textbox-generator.js" defer></script>
-        <script src="static/js/oneshot-font20.js" defer></script>
-		<script src="static/js/site-announcement.js" defer></script>
+	<script src="static/js/theme-switcher.js"></script>
+	<script src="static/js/alert-sound.js" defer></script>
+	<script src="static/js/textbox-generator.js" defer></script>
+	<script src="static/js/oneshot-font20.js" defer></script>
+	<script src="static/js/site-announcement.js" defer></script>
 
 	<style>
 		#tbCanvasWrap {
 			text-align: center;
 			margin: 12px 0 18px 0;
 		}
+
 		#niko-textbox {
 			max-width: 100%;
 			height: auto;
 			border: 2px solid var(--box-border);
 			image-rendering: pixelated;
 		}
+
 		.tb-btn-row {
 			display: flex;
 			flex-wrap: wrap;
@@ -56,6 +60,7 @@
 			justify-content: center;
 			margin-top: 12px;
 		}
+
 		.tb-btn-row .btn {
 			margin: 4px 0;
 			width: auto !important;
@@ -63,14 +68,17 @@
 			font-size: 12pt;
 			padding: 6px 12px;
 		}
+
 		.tb-row {
 			margin-bottom: 14px;
 		}
+
 		.tb-row label {
 			display: block;
 			margin-bottom: 5px;
 			font-size: 13pt;
 		}
+
 		.tb-row select,
 		.tb-row textarea {
 			width: 100%;
@@ -82,24 +90,28 @@
 			font-size: 13pt;
 			padding: 6px;
 		}
+
 		.tb-cols {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 18px;
 			margin: 14px 0;
 		}
+
 		.tb-col {
 			display: flex;
 			flex-direction: column;
 			gap: 4px;
 			font-size: 12pt;
 		}
+
 		.color-reset-btn {
 			cursor: pointer;
 			font-size: 10pt;
 			color: var(--header-subtitle);
 			text-decoration: underline;
 		}
+
 		.tb-credit {
 			font-size: 10.5pt;
 			color: #c8b8c8;
@@ -107,6 +119,7 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div id="header">
 		<a href="index.html" style="text-decoration: none;">
@@ -119,6 +132,13 @@
 		<h3>Preview</h3>
 		<div id="tbCanvasWrap">
 			<canvas id="niko-textbox" width="608" height="128"></canvas>
+
+			<noscript>
+				<div id="noscriptWarn">
+					Sorry! We couldn't load the textbox generator properly, since JavaScript is disabled.
+				</div>
+			</noscript>
+
 			<div class="tb-btn-row">
 				<button type="button" id="copy-textbox" class="btn">[ Copy ]</button>
 				<button type="button" id="save-textbox" class="btn">[ Save ]</button>
@@ -170,7 +190,8 @@
 		</div>
 
 		<div class="tb-row">
-			<button type="button" id="arrowbool" class="btn" style="margin: 8px 0; width: auto !important; padding: 6px 14px; font-size: 12pt;">
+			<button type="button" id="arrowbool" class="btn"
+				style="margin: 8px 0; width: auto !important; padding: 6px 14px; font-size: 12pt;">
 				Draw arrow: <span id="arrowval">ON</span>
 			</button>
 		</div>
@@ -181,8 +202,12 @@
 		</div>
 
 		<div class="tb-credit">
-			<p>Code [textbox-generator.js] referenced a bit from <a href="https://kvejp.dev/oneshot-textbox-generator/" target="_blank">kvejp.dev</a>.</p>
-            <p>This project is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a>. If you're basing something off my code, it's recommended to contact me via the <a href="mailto:support.kipsite@gmail.com">support email</a>! it'd be fun to check it out.</p>
+			<p>Code [textbox-generator.js] referenced a bit from <a href="https://kvejp.dev/oneshot-textbox-generator/"
+					target="_blank">kvejp.dev</a>.</p>
+			<p>This project is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0"
+					target="_blank">Apache License, Version 2.0</a>. If you're basing something off my code, it's
+				recommended to contact me via the <a href="mailto:support.kipsite@gmail.com">support email</a>! it'd be
+				fun to check it out.</p>
 		</div>
 	</div>
 
@@ -205,4 +230,5 @@
 		OneShot and its assets are property of Future Cat LLC.
 	</div>
 </body>
+
 </html>
