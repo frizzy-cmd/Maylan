@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	    <meta charset="UTF-8">
+		<meta name="title" content="Maylan's Homepage">
+		<meta name="description" content="A simple OneShot textbox generator, and very accurate too!">
+		<meta name="keywords" content="oneshot, save maker, save editor, modding, p-settings, save file, rpg maker, alula editor, cedric reader, calamus toolkit">
+		<meta name="language" content="EN">
+		<meta name="owner" content="maylan">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#859a9d">
+
+		<!-- OpenGraph / Discord Metatags -->
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Homepage">
+		<meta property="og:title" content="Maylan's Homepage">
+		<meta property="og:description" content="A simple OneShot textbox generator, and very accurate too!">
+		<meta property="og:url" content="https://maylan.teaa.workerss.dev/">
+		<meta property="og:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+		<meta property="og:image:secure_url" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+		<meta property="og:image:type" content="image/jpeg">
+		<meta property="og:locale" content="en_US">
+
+		<!-- Twitter & discord Card Layout -->
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:url" content="https://maylan.teaa.workerss.dev/">
+		<meta name="twitter:title" content="Maylan's Homepage">
+		<meta name="twitter:description" content="A simple OneShot textbox generator, and very accurate too!">
+		<meta name="twitter:image" content="https://maylan.teaa.workers.dev/static/img/icon.png">
+
+		<link rel="icon" type="image/png" href="https://maylan.teaa.workers.dev/static/img/icon.png">
+		<link rel="stylesheet" href="static/styles.css">
+        <title>Textbox Generator - Maylan's Homepage</title>
+
+        <script src="static/js/theme-switcher.js"></script>
+		<script src="static/js/alert-sound.js" defer></script>
+        <script src="static/js/textbox-generator.js" defer></script>
+        <script src="static/js/oneshot-font20.js" defer></script>
+
+	<style>
+		#tbCanvasWrap {
+			text-align: center;
+			margin: 12px 0 18px 0;
+		}
+		#niko-textbox {
+			max-width: 100%;
+			height: auto;
+			border: 2px solid var(--box-border);
+			image-rendering: pixelated;
+		}
+		.tb-btn-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			justify-content: center;
+			margin-top: 12px;
+		}
+		.tb-btn-row .btn {
+			margin: 4px 0;
+			width: auto !important;
+			min-width: 150px;
+			font-size: 12pt;
+			padding: 6px 12px;
+		}
+		.tb-row {
+			margin-bottom: 14px;
+		}
+		.tb-row label {
+			display: block;
+			margin-bottom: 5px;
+			font-size: 13pt;
+		}
+		.tb-row select,
+		.tb-row textarea {
+			width: 100%;
+			box-sizing: border-box;
+			background: var(--input-bg);
+			color: #ffffff;
+			border: 1px solid var(--input-border);
+			font-family: Terminus, monospace;
+			font-size: 13pt;
+			padding: 6px;
+		}
+		.tb-cols {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 18px;
+			margin: 14px 0;
+		}
+		.tb-col {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			font-size: 12pt;
+		}
+		.color-reset-btn {
+			cursor: pointer;
+			font-size: 10pt;
+			color: var(--header-subtitle);
+			text-decoration: underline;
+		}
+		.tb-credit {
+			font-size: 10.5pt;
+			color: #c8b8c8;
+			line-height: 1.5;
+		}
+	</style>
+</head>
+<body>
+	<div id="header">
+		<a href="index.html" style="text-decoration: none;">
+			<img id="logo" src="static/img/logo.png" alt="OneShot Logo" title="Go to Homepage">
+		</a>
+		<div id="subtitle">Textbox Generator</div>
+	</div>
+
+	<div id="box">
+		<h3>Preview</h3>
+		<div id="tbCanvasWrap">
+			<canvas id="niko-textbox" width="608" height="128"></canvas>
+			<div class="tb-btn-row">
+				<button type="button" id="copy-textbox" class="btn">[ Copy ]</button>
+				<button type="button" id="save-textbox" class="btn">[ Save ]</button>
+				<button type="button" id="open-tb-new-tab" class="btn">[ Open in new tab ]</button>
+			</div>
+		</div>
+
+		<h3>Settings</h3>
+		<div class="tb-row">
+			<label for="oneshot-character-category">Character</label>
+			<select id="oneshot-character-category">
+				<option value="Niko">Niko</option>
+			</select>
+		</div>
+
+		<div class="tb-row">
+			<label for="oneshot-character-expression">Expression</label>
+			<select id="oneshot-character-expression">
+				<option value="niko">niko</option>
+			</select>
+		</div>
+
+		<div class="tb-row">
+			<label for="oneshot-text-content">Text</label>
+			<textarea id="oneshot-text-content" rows="4">*cat noises*</textarea>
+		</div>
+
+		<div class="tb-cols">
+			<div class="tb-col">
+				<label for="text-color">Text color</label>
+				<input type="color" id="text-color" value="#ffffff">
+				<span class="color-reset-btn" data-col="#ffffff">reset</span>
+			</div>
+			<div class="tb-col">
+				<label for="bg-color">Bg color</label>
+				<input type="color" id="bg-color" value="#000000">
+				<span class="color-reset-btn" data-col="#000000">reset</span>
+			</div>
+			<div class="tb-col">
+				<label for="border-color">Border color</label>
+				<input type="color" id="border-color" value="#ff921e">
+				<span class="color-reset-btn" data-col="#ff921e">reset</span>
+			</div>
+		</div>
+
+		<div class="tb-row">
+			<label for="bg-trans">Background transparency</label>
+			<input type="range" id="bg-trans" min="1" max="100" value="20">
+		</div>
+
+		<div class="tb-row">
+			<button type="button" id="arrowbool" class="btn" style="margin: 8px 0; width: auto !important; padding: 6px 14px; font-size: 12pt;">
+				Draw arrow: <span id="arrowval">ON</span>
+			</button>
+		</div>
+
+		<div class="tb-row">
+			<label for="custom-image">Custom face image</label>
+			<input type="file" id="custom-image" accept="image/*">
+		</div>
+
+		<div class="tb-credit">
+			<p>Code [textbox-generator.js] referenced a bit from <a href="https://kvejp.dev/oneshot-textbox-generator/" target="_blank">kvejp.dev</a>.</p>
+            <p>This project is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a>. If you're basing something off my code, it's recommended to contact me via the <a href="mailto:support.kipsite@gmail.com">support email</a>! it'd be fun to check it out.</p>
+		</div>
+	</div>
+
+	<div id="footer">
+		This website was made by <a href="https://github.com/frizzy-cmd" target="_blank">Maylan</a> |
+		<a href="legal.html">Legal</a> |
+		<a href="https://github.com/frizzy-cmd/NRHomepage" target="_blank">Source Code</a>
+
+		<div class="theme-picker">
+			<span>Theme: </span>
+			<select id="themeSelect" class="theme-dropdown">
+				<option value="theme-barrens">The Barrens (Purple)</option>
+				<option value="theme-refuge">The Refuge (Pink/Red)</option>
+				<option value="theme-glen">The Glen (Emerald Green)</option>
+			</select>
+		</div>
+	</div>
+
+	<div id="sub-footer">
+		OneShot and its assets are property of Future Cat LLC.
+	</div>
+</body>
+</html>
