@@ -20,3 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // search code for files but lazy to rename
+// also forgot to mention not only exclusive to calamus toolkit page.
+// keep this name for compatibility reasons..
