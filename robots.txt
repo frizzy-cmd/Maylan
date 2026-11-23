@@ -7,7 +7,9 @@ Disallow: /admpw.txt
 Disallow: /deprecated/
 Disallow: /404.html
 Disallow: /unavail.html
-Disallow: /vm.html
+Disallow: /incompatible.html
+Disallow: /about-me.html
+Disallow: /about-me-specs.html
 
 Disallow: /alula.html
 
