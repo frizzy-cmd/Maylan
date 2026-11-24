@@ -1,4 +1,9 @@
 // site-announcement.js
+// OMG! FINALLY REWRITTEN AND FIXED BUG! YES!
+
+// btw im pushing this to prod w/o testing bc why not its like russian roulette
+
+let curAnnonTxt = '';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	try {
@@ -8,13 +13,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 		const data = await res.json();
 		if (!data.active || !data.text) return;
 
-		// ceck if usr dismissed THIS SPECIFIC text of annon
-		const dismissedText = sessionStorage.getItem('dismissed_site_announcement');
-		if (data.closable && dismissedText === data.text) {
+		curAnnonTxt = data.text;
+
+		// skip if user already closed this exact msg
+		const dismissed = sessionStorage.getItem('dismissed_site_announcement');
+		if (data.closable && dismissed === curAnnonTxt) {
 			return;
 		}
 
-        // ts make bar for annonce
 		const bar = document.createElement('div');
 		bar.id = 'siteAnnouncementBar';
 		bar.style.cssText = `
@@ -34,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 			align-items: center;
 		`;
 
-        // empty for literal txt.
 		bar.innerHTML = `
 			<div style="flex: 1; text-align: center;">
 				<strong></strong> ${escapeHtml(data.text)}
@@ -43,14 +48,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 		`;
 
 		document.body.appendChild(bar);
-
-	} catch(e) {}
+	} catch (e) {}
 });
 
 function closeSiteAnnouncement() {
 	const bar = document.getElementById('siteAnnouncementBar');
 	if (bar) bar.style.display = 'none';
-	sessionStorage.setItem('dismissed_site_announcement', announcementText);
+
+	const txt = curAnnonTxt || (bar ? bar.textContent.replace('✖', '').trim() : '');
+	if (txt) {
+		sessionStorage.setItem('dismissed_site_announcement', txt);
+	}
 }
 
 function escapeHtml(str) {
