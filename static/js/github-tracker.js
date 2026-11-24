@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {	const commitContaine
 				<span>Date: ${formattedDate}</span><br>
 				<span>UniqueID: <code>#${shortSha}</code></span> | 
 				<span>Commit: <em>"${message}"</em></span> |
-				<span>Build: <strong>57</strong></span>
+				<span>Build: <strong>63</strong></span>
 			</div>
 		`;
 	} catch (e) {
