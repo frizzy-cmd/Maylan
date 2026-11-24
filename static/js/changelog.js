@@ -5,7 +5,7 @@ var WHAT_CHANGED = [
         version: "v2.0.3",
         date: "November 23, 2026",
         category: "Website",
-        title: "Bug FIx",
+        title: "Bug Fix",
         changes: [
             "OT1C: Fixed announcements not disappearing even when closed glitch (super longstanding bug)"
 
