@@ -59,6 +59,63 @@ var cfg = {
 	customImg: null
 };
 
+//presets here
+var randPools = [
+	// { ch: "Niko", expr: "niko_speak", txt: "[I'M A ROBOT AND I... EAT BATTERIES... INSTEAD OF NORMAL PEOPLE FOOD!]" },
+	{ ch: "Niko", expr: "niko_speak", txt: "[I'M A ROBOT AND I... EAT BATTERIES...\nINSTEAD OF NORMAL PEOPLE FOOD!]" },
+	{ ch: "Niko", expr: "niko", txt: "But I'm not a cat..." },
+	{ ch: "Niko", expr: "niko", txt: "*cat noises*" },
+	{ ch: "Niko", expr: "niko_what", txt: "*confused cat noises*" },
+	{ ch: "Niko", expr: "niko_what", txt: "I'm scared of ladders.." },
+	{ ch: "Alula", expr: "alula", txt: "Fish!" },
+	{ ch: "Alula", expr: "alula_speak", txt: "Moss is tasty!" },
+	{ ch: "Alula", expr: "alula", txt: "What's a cat?" },
+	{ ch: "Calamus", expr: "calamus_shame", txt: "Oh my stars!" },
+	{ ch: "Calamus", expr: "calamus", txt: "Oh, Niko, did you come by for a visit?\nOur house is up here, please follow me." },
+	{ ch: "Cedric", expr: "cedric_hmm", txt: "Tea DOES sound really nice right now..." },
+	{ ch: "Proto", expr: "proto2b", txt: "[This is where we part ways.]" },
+	{ ch: "Rue", expr: "rue_sad", txt: "Hello, Niko." },
+];
+// TODO: add more ppl here? :P
+
+
+function applyRandStart() {
+	var pick = randPools[Math.floor(Math.random() * randPools.length)];
+	if (!pick) return;
+
+	if (pick.ch && ONESHOT_EXPRESSIONS[pick.ch] && charSel) {
+		cfg.character = pick.ch;
+		charSel.value = pick.ch;
+		loadExprs(cfg.character);
+		var list = ONESHOT_EXPRESSIONS[cfg.character];
+		cfg.expression = (pick.expr && list.indexOf(pick.expr) !== -1) ? pick.expr : (list[0] || "");
+		if (exprSel) exprSel.value = cfg.expression;
+	}
+
+	if (txtBox) {
+		txtBox.value = pick.txt;
+		clampLines(txtBox);
+		cfg.text = txtBox.value;
+	} else {
+		cfg.text = pick.txt;
+	}
+
+	if (pick.faceUrl) {
+		var tmpFace = new Image();
+		tmpFace.onload = function () {
+			cfg.customImg = tmpFace;
+			paint();
+		};
+		tmpFace.onerror = function () {
+			cfg.customImg = null;
+			paint();
+		};
+		tmpFace.src = pick.faceUrl;
+	} else {
+		cfg.customImg = null;
+	}
+}
+
 function alphaHex(pct) {
 	var n = Math.max(0, Math.min(100, Number(pct)));
 	var h = Math.round(((100 - n) / 100) * 255).toString(16);
@@ -484,6 +541,7 @@ document.getElementById("open-tb-new-tab").addEventListener("click", function ()
 
 function startRender() {
 	fntLoaded = true;
+	applyRandStart();
 	paint();
 }
 
