@@ -21,6 +21,7 @@
     --input-shadow: #2a006a;
     --btn-bg: #ba6a30;
     --btn-border: #603010;
+    --btn-hi: #e09255;
 }
 
 /* BARRENS 1 */
@@ -41,6 +42,7 @@ body.theme-barrens {
     --input-shadow: #2a006a;
     --btn-bg: #ba6a30;
     --btn-border: #603010;
+    --btn-hi: #e09255;
 }
 
 /* REFUGE */
@@ -61,6 +63,7 @@ body.theme-refuge {
     --input-shadow: #5a0028;
     --btn-bg: #d83860;
     --btn-border: #701028;
+    --btn-hi: #ff6b8b;
 }
 
 /* GLEN */
@@ -81,6 +84,7 @@ body.theme-glen {
     --input-shadow: #006a30;
     --btn-bg: #28a058;
     --btn-border: #105028;
+    --btn-hi: #58cf84;
 }
 
 body {
@@ -102,6 +106,15 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
     color: var(--link-color);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:focus-visible {
+    outline: 2px dashed var(--header-subtitle);
+    outline-offset: 2px;
 }
 
 #header {
@@ -161,24 +174,54 @@ a {
     font-size: 14pt;
 }
 
-#box input[type=button], .btn {
+#box input[type=text]:focus, #box input[type=number]:focus {
+    outline: none;
+    border-bottom-color: var(--header-subtitle);
+}
+
+.btn,
+#box input[type=button],
+#box input[type=submit] {
     display: block;
     margin: 32px auto;
-    width: 220px !important;
+    width: 220px;
+    max-width: 100%;
     padding: 8px;
-    border: 0;
-    border-bottom: 8px solid var(--btn-border);
-    color: white;
-    text-align: center;
     background: var(--btn-bg);
+    color: white;
+    border-top: 3px solid var(--btn-hi);
+    border-left: 3px solid var(--btn-hi);
+    border-right: 3px solid var(--btn-border);
+    border-bottom: 8px solid var(--btn-border);
+    box-shadow: 0 0 6px var(--btn-border);
     font-family: Terminus, monospace;
     font-size: 16pt;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
 }
 
-#box input[type=button]:active, .btn:active {
-    border-bottom: 2px solid var(--btn-border);
-    margin-top: 38px;
+.btn:hover,
+#box input[type=button]:hover,
+#box input[type=submit]:hover {
+    filter: brightness(1.12);
+}
+
+.btn:active,
+#box input[type=button]:active,
+#box input[type=submit]:active {
+    border-top: 4px solid var(--btn-border);
+    border-left: 4px solid var(--btn-border);
+    border-right: 2px solid var(--btn-hi);
+    border-bottom: 2px solid var(--btn-hi);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.45);
+}
+
+.btn:focus-visible,
+#box input[type=button]:focus-visible,
+#box input[type=submit]:focus-visible {
+    outline: 2px dashed var(--header-subtitle);
+    outline-offset: 3px;
 }
 
 #box table {
@@ -303,13 +346,16 @@ body.access-high-contrast {
 	--input-shadow: #ffffff;
 	--btn-bg: #ffff00;
 	--btn-border: #000000;
+	--btn-hi: #ffff00;
 }
 body.access-high-contrast, body.access-high-contrast * {
 	text-shadow: none !important;
 	box-shadow: none !important;
+	filter: none !important;
 }
 body.access-high-contrast .btn,
-body.access-high-contrast #box input[type=button] {
+body.access-high-contrast #box input[type=button],
+body.access-high-contrast #box input[type=submit] {
 	color: #000000 !important;
 }
 

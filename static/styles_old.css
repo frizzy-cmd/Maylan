@@ -1,0 +1,360 @@
+/* THIS IS THE OLD CSS BEFORE THE v2.1.0 OVERHAUL 
+THIS IS USED FOR PAGES THAT DO NOT BEHAVE WELL WITH THE NEW CSS
+[probably]
+
+SO YEAH*/
+
+/* Pages that use it: */
+/* none */
+
+@font-face {
+    font-family: Terminus;
+    src: url("terminus.ttf");
+}
+
+:root {
+    /* BARRENS */
+    --bg-main: #200530;
+    --text-main: #f0c0f0;
+    --header-subtitle: #fa9040;
+    --header-shadow: #fa7060;
+    --link-color: #f060f0;
+    --msg-bg: rgba(48, 24, 48, 0.5);
+    --msg-border: #fa9040;
+    --msg-shadow: #fa9040;
+    --box-bg: rgba(32, 24, 48, 0.5);
+    --box-border: #401560;
+    --box-shadow: #400080;
+    --input-bg: #4000a0;
+    --input-border: #5a2a7a;
+    --input-shadow: #2a006a;
+    --btn-bg: #ba6a30;
+    --btn-border: #603010;
+}
+
+/* BARRENS 1 */
+body.theme-barrens {
+    --bg-main: #200530;
+    --text-main: #f0c0f0;
+    --header-subtitle: #fa9040;
+    --header-shadow: #fa7060;
+    --link-color: #f060f0;
+    --msg-bg: rgba(48, 24, 48, 0.5);
+    --msg-border: #fa9040;
+    --msg-shadow: #fa9040;
+    --box-bg: rgba(32, 24, 48, 0.5);
+    --box-border: #401560;
+    --box-shadow: #400080;
+    --input-bg: #4000a0;
+    --input-border: #5a2a7a;
+    --input-shadow: #2a006a;
+    --btn-bg: #ba6a30;
+    --btn-border: #603010;
+}
+
+/* REFUGE */
+body.theme-refuge {
+    --bg-main: #240518;
+    --text-main: #f0c0f0;
+    --header-subtitle: #fa9040;
+    --header-shadow: #fa7060;
+    --link-color: #f060f0;
+    --msg-bg: rgba(58, 12, 32, 0.5);
+    --msg-border: #ff3366;
+    --msg-shadow: #ff3366;
+    --box-bg: rgba(48, 16, 32, 0.5);
+    --box-border: #701538;
+    --box-shadow: #800030;
+    --input-bg: #800038;
+    --input-border: #a02a58;
+    --input-shadow: #5a0028;
+    --btn-bg: #d83860;
+    --btn-border: #701028;
+}
+
+/* GLEN */
+body.theme-glen {
+    --bg-main: #052015;
+    --text-main: #f0c0f0;
+    --header-subtitle: #fa9040;
+    --header-shadow: #fa7060;
+    --link-color: #f060f0;
+    --msg-bg: rgba(24, 48, 32, 0.5);
+    --msg-border: #40fa90;
+    --msg-shadow: #40fa90;
+    --box-bg: rgba(24, 48, 32, 0.5);
+    --box-border: #156038;
+    --box-shadow: #008040;
+    --input-bg: #00a050;
+    --input-border: #2a7a4a;
+    --input-shadow: #006a30;
+    --btn-bg: #28a058;
+    --btn-border: #105028;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: Terminus, monospace;
+    font-size: 16pt;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 32px 0;
+    color: var(--header-subtitle);
+    font-weight: unset;
+    font-size: 26pt;
+    text-align: center;
+    text-shadow: 0px 0px 4px var(--header-shadow);
+}
+
+a {
+    color: var(--link-color);
+}
+
+#header {
+    margin: 32px 0;
+    text-align: center;
+}
+
+#header img {
+    max-width: 100%;
+}
+
+#header a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+#header img:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+#header #subtitle {
+    margin-top: -20px;
+    color: var(--header-subtitle);
+    font-size: 26pt;
+    text-shadow: 0px 0px 4px var(--header-shadow);
+}
+
+#message {
+    width: 628px;
+    margin: 8px auto 64px auto;
+    padding: 16px 32px;
+    border: 4px solid var(--msg-border);
+    color: white;
+    background: var(--msg-bg);
+    box-shadow: 0px 0px 6px 2px var(--msg-border), var(--msg-border) 0px 0px 32px inset;
+}
+
+#box {
+    width: 628px;
+    margin: 32px auto;
+    padding: 16px 32px;
+    border: 4px solid var(--box-border);
+    background: var(--box-bg);
+    box-shadow: 0px 0px 6px 2px var(--box-shadow), var(--box-shadow) 0px 0px 32px inset;
+}
+
+#box input[type=text], #box input[type=number] {
+    padding: 4px;
+    border: 0;
+    border-bottom: 2px solid var(--input-border);
+    width: 100%;
+    color: white;
+    background: var(--input-bg);
+    box-shadow: 0px 0px 4px 2px var(--input-shadow);
+    font-family: Terminus, monospace;
+    font-size: 14pt;
+}
+
+#box input[type=button], .btn {
+    display: block;
+    margin: 32px auto;
+    width: 220px !important;
+    padding: 8px;
+    border: 0;
+    border-bottom: 8px solid var(--btn-border);
+    color: white;
+    text-align: center;
+    background: var(--btn-bg);
+    font-family: Terminus, monospace;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+#box input[type=button]:active, .btn:active {
+    border-bottom: 2px solid var(--btn-border);
+    margin-top: 38px;
+}
+
+#box table {
+    width: 100%;
+}
+
+#box tbody td {
+    padding: 4px 0;
+    width: 50%;
+}
+
+.theme-picker {
+    margin-top: 12px;
+    font-size: 11pt;
+    color: #a0a0a0;
+}
+
+.theme-dropdown {
+    background: var(--input-bg);
+    color: #ffffff;
+    border: 1px solid var(--box-border);
+    padding: 4px 8px;
+    font-family: Terminus, monospace;
+    font-size: 11pt;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#footer {
+    margin: 64px 0px 12px 0px;
+    color: gray;
+    text-align: center;
+}
+
+#sub-footer {
+    margin-top: 12px;
+    margin-bottom: 64px;
+    color: #777;
+    font-size: 11pt;
+    text-align: center;
+}
+
+/* FINALLY add <code> support */
+code {
+    font-family: Terminus, monospace;
+    font-size: 14pt;
+    background: var(--input-bg);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--box-border);
+}
+
+@media screen and (max-width: 750px) {
+    #message, #box {
+        border-left: 0;
+        border-right: 0;
+        width: auto;
+    }
+}
+
+/* TWM CURSOR (refer to theme-switcher.js and settings.js and settings.html for info) */
+body.twm-cursor,
+body.twm-cursor a,
+body.twm-cursor button,
+body.twm-cursor input,
+body.twm-cursor select,
+body.twm-cursor textarea,
+body.twm-cursor label,
+body.twm-cursor div {
+    cursor: url("img/twmcursor.png"), auto !important;
+}
+
+/* ACCESSIBILITY INIT AT 6/9/2026 */
+/* LOL 69 */
+/* OpenDyslexic fonts here for dyslexics */
+
+@font-face {
+	font-family: OpenDyslexic;
+	src: url("opendyslexic/OpenDyslexic-Regular.otf");
+}
+@font-face {
+	font-family: OpenDyslexic;
+	src: url("opendyslexic/OpenDyslexic-Bold.otf");
+	font-weight: bold;
+}
+@font-face {
+	font-family: OpenDyslexic;
+	src: url("opendyslexic/OpenDyslexic-Italic.otf");
+	font-style: italic;
+}
+@font-face {
+	font-family: OpenDyslexic;
+	src: url("opendyslexic/OpenDyslexic-BoldItalic.otf");
+	font-weight: bold;
+	font-style: italic;
+}
+
+body.access-dyslexia, body.access-dyslexia * {
+	font-family: OpenDyslexic, Terminus, monospace !important;
+}
+
+body.access-font-small { font-size: 12pt; }
+body.access-font-medium { font-size: 16pt; }
+body.access-font-large { font-size: 20pt; }
+
+/* HIGH CONTRAST */
+body.access-high-contrast {
+	--bg-main: #000000;
+	--text-main: #ffffff;
+	--header-subtitle: #ffff00;
+	--header-shadow: #ffff00;
+	--link-color: #00ffff;
+	--msg-bg: #000000;
+	--msg-border: #ffffff;
+	--msg-shadow: #ffffff;
+	--box-bg: #000000;
+	--box-border: #ffffff;
+	--box-shadow: #ffffff;
+	--input-bg: #1a1a1a;
+	--input-border: #ffffff;
+	--input-shadow: #ffffff;
+	--btn-bg: #ffff00;
+	--btn-border: #000000;
+}
+body.access-high-contrast, body.access-high-contrast * {
+	text-shadow: none !important;
+	box-shadow: none !important;
+}
+body.access-high-contrast .btn,
+body.access-high-contrast #box input[type=button] {
+	color: #000000 !important;
+}
+
+/* code HC */
+body.access-dyslexia code {
+    font-family: OpenDyslexic, Terminus, monospace !important;
+}
+
+body.access-high-contrast code {
+    background: #1a1a1a;
+    color: #00ffff;
+    border-color: #ffffff;
+}
+
+/* REDUCED MOTION */
+body.access-reduced-motion, body.access-reduced-motion * {
+	animation: none !important;
+	transition: none !important;
+	scroll-behavior: auto !important;
+}
+body.access-reduced-motion #starfield {
+	display: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+	#starfield { display: none; }
+}
+#noscriptWarn {
+    text-align: center;
+    color: #ff8888;
+    font-size: 13pt;
+    max-width: 460px;
+    margin: 80px auto;
+    padding: 20px;
+    border: 3px solid #701538;
+    background: rgba(18, 6, 28, 0.9);
+    border-radius: 4px;
+    /* CSS snippet taken from check.html lol */
+    /* FUCK IT WE BALL. WE PUTTING IT GLOBAL */
+}
