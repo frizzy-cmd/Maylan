@@ -2,8 +2,8 @@
 
 var WHAT_CHANGED = [
 	{
-        version: "v2.0.3",
-        date: "November 23, 2026",
+        version: "v2.0.4",
+        date: "November 24, 2026",
         category: "Website",
         title: "Bug Fix",
         changes: [
