@@ -5,7 +5,17 @@ var WHAT_CHANGED = [
         version: "v2.0.3",
         date: "November 23, 2026",
         category: "Website",
-        title: "CSS update",
+        title: "Bug FIx",
+        changes: [
+            "OT1C: Fixed announcements not disappearing even when closed glitch (super longstanding bug)"
+
+        ]
+    },
+	{
+        version: "v2.0.3",
+        date: "November 23, 2026",
+        category: "Website",
+        title: "CSS Update",
         changes: [
             "Maylan, Longley: Tweaked some CSS"
 
@@ -15,7 +25,7 @@ var WHAT_CHANGED = [
         version: "v2.0.2",
         date: "November 23, 2027",
         category: "Website",
-        title: "Tool & some fixes",
+        title: "Tool & Some Fixes",
         changes: [
             "Maylan: Added a textbox generator! It's very, almost 1:1 accuracy for OneShot dialogues.",
             "OT1C: Contributed to textbox generator",
