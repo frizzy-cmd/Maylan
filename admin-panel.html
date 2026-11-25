@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="title" content="admin - s's Homepage">
+	<meta name="title" content="Admin - Maylan's Homepage">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#5a207f">
 
@@ -15,18 +15,30 @@
 	<title>[Site] Admin - Maylan's Homepage</title>
 
 	<style>
+		@media (min-width: 751px) {
+			#box { width: 860px; }
+		}
+
 		.admin-box {
 			background: rgba(18, 6, 28, 0.9);
 			border: 3px solid var(--box-border);
-			padding: 24px;
+			padding: 20px 24px;
 			border-radius: 6px;
 			margin-bottom: 20px;
 		}
 
+		.admin-box h3 {
+			margin: 0 0 14px 0;
+			font-size: 17pt;
+			text-align: left;
+		}
+
+		.admin-box label { font-size: 12pt; }
+
 		.status-badge {
 			display: inline-block;
-			padding: 4px 12px;
-			font-size: 14pt;
+			padding: 2px 10px;
+			font-size: 13pt;
 			font-weight: bold;
 			border-radius: 4px;
 			margin-left: 8px;
@@ -43,6 +55,151 @@
 			color: #ffcdd2;
 			border: 1px solid #ff5252;
 		}
+
+		/* tabs */
+		.tabs {
+			display: flex;
+			flex-wrap: wrap;
+			margin: 0 0 20px 0;
+			border-bottom: 3px solid var(--box-border);
+		}
+
+		.tab {
+			background: none;
+			border: 0;
+			border-bottom: 4px solid transparent;
+			margin-bottom: -3px;
+			padding: 6px 16px;
+			color: var(--text-main);
+			font-family: Terminus, monospace;
+			font-size: 14pt;
+			cursor: pointer;
+		}
+
+		.tab:hover { color: var(--header-subtitle); }
+
+		.tab.on {
+			color: var(--header-subtitle);
+			border-bottom-color: var(--header-subtitle);
+		}
+
+		.tab:focus-visible {
+			outline: 2px dashed var(--header-subtitle);
+			outline-offset: -2px;
+		}
+
+		.pane { display: none; }
+		.pane.on { display: block; }
+
+		/* refresh row */
+		#anBar {
+			display: none;
+			align-items: center;
+			justify-content: space-between;
+			margin: -8px 0 16px 0;
+			font-size: 11pt;
+			color: #a890b0;
+		}
+
+		.btn.sm {
+			display: inline-block;
+			width: auto;
+			margin: 0;
+			padding: 3px 14px;
+			font-size: 12pt;
+			border-bottom-width: 5px;
+		}
+
+		/* number tiles */
+		.tiles {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+			gap: 12px;
+			margin-bottom: 20px;
+		}
+
+		.tile {
+			border: 2px solid var(--box-border);
+			background: rgba(18, 6, 28, 0.9);
+			padding: 8px 12px;
+		}
+
+		.tile b {
+			display: block;
+			font-weight: normal;
+			font-size: 22pt;
+			color: var(--header-subtitle);
+		}
+
+		.tile span { font-size: 11pt; color: #a890b0; }
+
+		.cols {
+			display: flex;
+			gap: 20px;
+			flex-wrap: wrap;
+		}
+
+		.cols > div { flex: 1; min-width: 240px; }
+
+		/* bar rows */
+		.bar {
+			display: grid;
+			grid-template-columns: minmax(70px, 10em) 1fr auto;
+			gap: 10px;
+			align-items: center;
+			padding: 2px 0;
+			font-size: 12pt;
+		}
+
+		.bar .bl {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.bar .bt {
+			height: 12px;
+			background: rgba(0, 0, 0, 0.35);
+			border: 1px solid var(--box-border);
+		}
+
+		.bar .bt i {
+			display: block;
+			height: 100%;
+			background: var(--btn-bg);
+		}
+
+		.bar .bn {
+			min-width: 3em;
+			text-align: right;
+			color: var(--header-subtitle);
+		}
+
+		.none { font-size: 12pt; color: #a890b0; }
+
+		/* tables */
+		.dt {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 12pt;
+		}
+
+		.dt th {
+			padding: 4px 10px 4px 0;
+			border-bottom: 2px solid var(--box-border);
+			color: var(--header-subtitle);
+			font-weight: normal;
+			text-align: left;
+		}
+
+		#box .dt tbody td {
+			width: auto;
+			padding: 4px 10px 4px 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+			word-break: break-all;
+		}
+
+		.dt .num { text-align: right; }
 	</style>
 </head>
 
@@ -51,139 +208,131 @@
 		<a href="index.html" style="text-decoration: none;">
 			<img id="logo" src="static/img/logo.png" alt="OneShot Logo">
 		</a>
-		<div id="subtitle">adminPanel</div>
+		<div id="subtitle">[Site] Admin Panel</div>
 	</div>
 
 	<div id="box">
 		<div id="loginGate" class="admin-box" style="text-align: center;">
-			<h3>Auth</h3>
-			<input type="password" id="adminPwd" placeholder="enter pw" style="width: 100%; margin-bottom: 12px;">
+			<h3 style="text-align: center;">Authentication</h3>
+			<input type="password" id="adminPwd" placeholder="Enter password.." style="width: 100%; margin-bottom: 12px;">
 			<button class="btn" onclick="loginAdmin()" style="width: 100% !important; margin: 0;">Login</button>
 		</div>
 
 		<!-- CONTROLS START -->
 		<div id="adminControls" style="display: none;">
-			<!-- maintenance -->
-			<div class="admin-box">
-				<h3>Status: <span id="currentStatusBadge" class="status-badge status-online">OK | ONLINE</span></h3>
 
-				<label style="display:block; margin: 12px 0 4px 0;">Downtime note (for unavail.html):</label>
-				<input type="text" id="maintenanceNoteInput" placeholder="maintenance or sumn like that.."
-					style="width: 100%; margin-bottom: 12px;">
-
-				<div style="display: flex; gap: 10px;">
-					<button class="btn" onclick="setSiteStatus('offline')"
-						style="background: #b71c1c; border-color: #5f0909; margin: 0; flex: 1;">Set OFFLINE</button>
-					<button class="btn" onclick="setSiteStatus('online')"
-						style="background: #2e7d32; border-color: #113813; margin: 0; flex: 1;">Set ONLINE</button>
-				</div>
+			<div class="tabs">
+				<button class="tab on" id="tab-site" onclick="showTab('site')">Site</button>
+				<button class="tab" id="tab-overview" onclick="showTab('overview')">Overview</button>
+				<button class="tab" id="tab-pages" onclick="showTab('pages')">Pages</button>
 			</div>
 
-			<!-- announcement -->
-			<div class="admin-box">
-				<h3>Announcement</h3>
+			<div id="anBar">
+				<span id="anStamp">Not loaded yet</span>
+				<button class="btn sm" onclick="loadAnalytics()">Refresh</button>
+			</div>
 
-				<label style="display:block; margin: 8px 0 4px 0;">Announcement msg:</label>
-				<input type="text" id="announcementTextInput" placeholder="e.g. gay"
-					style="width: 100%; margin-bottom: 12px;">
+			<!-- SITE -->
+			<div class="pane on" id="pane-site">
+				<!-- maintenance -->
+				<div class="admin-box">
+					<h3>Status: <span id="currentStatusBadge" class="status-badge status-online">OK | ONLINE</span></h3>
 
-				<div style="display: flex; gap: 16px; margin-bottom: 12px; align-items: center;">
-					<div>
-						<label style="font-size: 11pt;">Timer (min only, 0 = inft):</label>
-						<input type="number" id="announcementDuration" value="0" min="0" style="width: 80px;">
-					</div>
-					<div>
-						<label style="font-size: 11pt; cursor: pointer;">
-							<input type="checkbox" id="announcementClosable" checked> allow usrs to close?
-						</label>
+					<label style="display:block; margin: 0 0 4px 0;">Downtime note:</label>
+					<input type="text" id="maintenanceNoteInput" placeholder="Maintenance, etc etc"
+						style="width: 100%; margin-bottom: 12px;">
+
+					<div style="display: flex; gap: 10px;">
+						<button class="btn" onclick="setSiteStatus('offline')"
+							style="background: #b71c1c; border-color: #5f0909; margin: 0; flex: 1;">Set OFFLINE</button>
+						<button class="btn" onclick="setSiteStatus('online')"
+							style="background: #2e7d32; border-color: #113813; margin: 0; flex: 1;">Set ONLINE</button>
 					</div>
 				</div>
 
-				<div style="display: flex; gap: 10px;">
-					<button class="btn" onclick="publishAnnouncement()" style="margin: 0; flex: 1;">Signal
-						announcement</button>
-					<button class="btn" onclick="clearAnnouncement()"
-						style="background: #424242; border-color: #1b1b1b; margin: 0; flex: 1;">Clear
-						announcement</button>
+				<!-- announcement -->
+				<div class="admin-box">
+					<h3>Announcement</h3>
+
+					<label style="display:block; margin: 0 0 4px 0;">Announcement message:</label>
+					<input type="text" id="announcementTextInput" placeholder="e.g. gay"
+						style="width: 100%; margin-bottom: 12px;">
+
+					<div style="display: flex; gap: 16px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+						<div>
+							<label style="font-size: 11pt;">Timer (in minutes ONLY! | 0 = infinite):</label>
+							<input type="number" id="announcementDuration" value="0" min="0" style="width: 80px;">
+						</div>
+						<div>
+							<label style="font-size: 11pt; cursor: pointer;">
+								<input type="checkbox" id="announcementClosable" checked> Allow users to close announcement?
+							</label>
+						</div>
+					</div>
+
+					<div style="display: flex; gap: 10px;">
+						<button class="btn" onclick="publishAnnouncement()" style="margin: 0; flex: 1;">Signal
+							announcement</button>
+						<button class="btn" onclick="clearAnnouncement()"
+							style="background: #424242; border-color: #1b1b1b; margin: 0; flex: 1;">Clear
+							announcement</button>
+					</div>
+				</div>
+
+				<!-- linky -->
+				<div class="admin-box">
+					<h3>OneMsg panel</h3>
+					<a href="onemsg-admin.html" class="btn" style="text-decoration: none; margin: 0;">Open</a>
 				</div>
 			</div>
 
-			<!-- linky -->
-			<div class="admin-box">
-				<h3>OneMsg panel</h3>
-				<a href="onemsg-admin.html" class="btn" style="text-decoration: none; margin: 0;">Open</a>
+			<!-- OVERVIEW -->
+			<div class="pane" id="pane-overview">
+				<div class="tiles">
+					<div class="tile"><b id="tlViews">-</b><span>Total views</span></div>
+					<div class="tile"><b id="tlToday">-</b><span>Views today (UTC)</span></div>
+					<div class="tile"><b id="tlTime">-</b><span>Avg. time on page</span></div>
+				</div>
+
+				<div class="admin-box">
+					<h3>Daily views, last 14d</h3>
+					<div id="anDaily"></div>
+				</div>
+
+				<div class="admin-box">
+					<h3>Referrers</h3>
+					<div id="anRefs"></div>
+				</div>
+
+				<div class="cols">
+					<div class="admin-box">
+						<h3>Viewport</h3>
+						<div id="anPorts"></div>
+					</div>
+					<div class="admin-box">
+						<h3>Theme</h3>
+						<div id="anThemes"></div>
+					</div>
+				</div>
 			</div>
-			<!-- analytics -->
-			<div class="admin-box">
-				<h3>Site Analytics</h3>
-				<button class="btn" onclick="loadAnalytics()"
-					style="margin: 0 0 16px 0; width: 100% !important;">Refresh Analytics</button>
 
-				<div id="analyticsContent" style="display:none;">
-					<p style="text-align:center; font-size: 13pt;">
-						Total views: <strong id="anTotalViews" style="color: var(--header-subtitle);">0</strong>
-						&nbsp;|&nbsp;
-						Avg time on page: <strong id="anAvgTime" style="color: var(--header-subtitle);">0s</strong>
-					</p>
-
-					<h4 style="text-align:left; font-size: 13pt; margin: 20px 0 8px 0;">Top pages</h4>
-					<table style="font-size: 11pt;">
+			<!-- PAGES -->
+			<div class="pane" id="pane-pages">
+				<div class="admin-box">
+					<h3>Top pages</h3>
+					<table class="dt">
 						<thead>
-							<tr>
-								<td><strong>Path</strong></td>
-								<td><strong>Views</strong></td>
-								<td><strong>Avg time</strong></td>
-							</tr>
+							<tr><th>Path</th><th class="num">Views</th><th class="num">Avg time</th></tr>
 						</thead>
 						<tbody id="anTopPages"></tbody>
 					</table>
+				</div>
 
-					<h4 style="text-align:left; font-size: 13pt; margin: 20px 0 8px 0;">Daily views (last 14d)</h4>
-					<table style="font-size: 11pt;">
+				<div class="admin-box">
+					<h3>Top clicks</h3>
+					<table class="dt">
 						<thead>
-							<tr>
-								<td><strong>Day</strong></td>
-								<td><strong>Views</strong></td>
-							</tr>
-						</thead>
-						<tbody id="anDailyViews"></tbody>
-					</table>
-
-					<h4 style="text-align:left; font-size: 13pt; margin: 20px 0 8px 0;">Referrers</h4>
-					<table style="font-size: 11pt;">
-						<thead>
-							<tr>
-								<td><strong>Source</strong></td>
-								<td><strong>Count</strong></td>
-							</tr>
-						</thead>
-						<tbody id="anReferrers"></tbody>
-					</table>
-
-					<div style="display: flex; gap: 20px; margin-top: 20px;">
-						<div style="flex:1;">
-							<h4 style="text-align:left; font-size: 13pt; margin: 0 0 8px 0;">Viewport</h4>
-							<table style="font-size: 11pt;">
-								<tbody id="anViewports"></tbody>
-							</table>
-						</div>
-						<div style="flex:1;">
-							<h4 style="text-align:left; font-size: 13pt; margin: 0 0 8px 0;">Theme</h4>
-							<table style="font-size: 11pt;">
-								<tbody id="anThemes"></tbody>
-							</table>
-						</div>
-					</div>
-
-					<h4 style="text-align:left; font-size: 13pt; margin: 20px 0 8px 0;">Top clicks</h4>
-					<table style="font-size: 11pt;">
-						<thead>
-							<tr>
-								<td><strong>Path</strong></td>
-								<td><strong>Tag</strong></td>
-								<td><strong>Label</strong></td>
-								<td><strong>Count</strong></td>
-							</tr>
+							<tr><th>Path</th><th>Tag</th><th>Label</th><th class="num">Count</th></tr>
 						</thead>
 						<tbody id="anTopClicks"></tbody>
 					</table>
@@ -192,12 +341,50 @@
 
 		</div>
 	</div>
+
 	<script>
-		// analytics..
+		// some quick scripts.
+		// most shit live in admin-panel.js btw
+		// #checkdat
+
+		var TABS = ['site', 'overview', 'pages'];
+		var loaded = false;
 
 		function anEsc(str) {
-			if (!str) return '';
-			return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			if (str === null || str === undefined) return '';
+			return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		}
+
+		function showTab(name) {
+			for (var i = 0; i < TABS.length; i++) {
+				var on = TABS[i] === name;
+				document.getElementById('pane-' + TABS[i]).className = on ? 'pane on' : 'pane';
+				document.getElementById('tab-' + TABS[i]).className = on ? 'tab on' : 'tab';
+			}
+			document.getElementById('anBar').style.display = (name === 'site') ? 'none' : 'flex';
+
+			if (name !== 'site' && !loaded) loadAnalytics();
+		}
+
+		// bar rows
+		// labelfn is opt
+		function bars(id, rows, lbl, val, labelFn) {
+			var el = document.getElementById(id);
+			if (!rows || !rows.length) { el.innerHTML = '<div class="none">No data yet</div>'; return; }
+
+			var max = 1;
+			for (var i = 0; i < rows.length; i++) max = Math.max(max, rows[i][val] || 0);
+
+			var h = '';
+			for (var j = 0; j < rows.length; j++) {
+				var r = rows[j];
+				var text = labelFn ? labelFn(r) : (r[lbl] || '(none)');
+				var pct = Math.max(2, Math.round((r[val] || 0) / max * 100));
+				h += '<div class="bar"><span class="bl" title="' + anEsc(text) + '">' + anEsc(text) + '</span>' +
+					'<span class="bt"><i style="width:' + pct + '%"></i></span>' +
+					'<span class="bn">' + (r[val] || 0) + '</span></div>';
+			}
+			el.innerHTML = h;
 		}
 
 		function loadAnalytics() {
@@ -207,63 +394,54 @@
 				return;
 			}
 
+			var stamp = document.getElementById('anStamp');
+			stamp.textContent = 'Loading..';
+
 			fetch('/api/admin/analytics/summary', {
 				headers: { 'X-Admin-Key': pwd }
 			})
 				.then(function (res) { return res.json(); })
 				.then(function (data) {
 					if (data.error) {
+						stamp.textContent = 'failed';
 						alert('Analytics error: ' + data.error);
 						return;
 					}
 
-					document.getElementById('analyticsContent').style.display = 'block';
-					document.getElementById('anTotalViews').innerText = data.totals.totalViews || 0;
-					document.getElementById('anAvgTime').innerText = Math.round(data.totals.avgTimeAll || 0) + 's';
+					loaded = true;
+					stamp.textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+					// tiles
+					var today = new Date().toISOString().slice(0, 10);
+					var todayViews = 0;
+					for (var i = 0; i < data.dailyViews.length; i++) {
+						if (data.dailyViews[i].day === today) todayViews = data.dailyViews[i].cnt;
+					}
+					document.getElementById('tlViews').textContent = data.totals.totalViews || 0;
+					document.getElementById('tlToday').textContent = todayViews;
+					document.getElementById('tlTime').textContent = Math.round(data.totals.avgTimeAll || 0) + 's';
+
+					bars('anDaily', data.dailyViews.slice().reverse(), 'day', 'cnt', function (r) { return r.day.slice(5); });
+					bars('anRefs', data.referrers, 'referrer', 'cnt', function (r) { return r.referrer || '(direct)'; });
+					bars('anPorts', data.viewports, 'viewport', 'cnt');
+					bars('anThemes', data.themes, 'theme', 'cnt');
 
 					var tp = '';
-					for (var i = 0; i < data.topPages.length; i++) {
-						var p = data.topPages[i];
-						tp += '<tr><td>' + anEsc(p.path) + '</td><td>' + p.views + '</td><td>' + Math.round(p.avgTime || 0) + 's</td></tr>';
+					for (var j = 0; j < data.topPages.length; j++) {
+						var p = data.topPages[j];
+						tp += '<tr><td>' + anEsc(p.path || '/') + '</td><td class="num">' + p.views + '</td><td class="num">' + Math.round(p.avgTime || 0) + 's</td></tr>';
 					}
-					document.getElementById('anTopPages').innerHTML = tp || '<tr><td colspan="3">no data yet</td></tr>';
-
-					var dv = '';
-					for (var i = 0; i < data.dailyViews.length; i++) {
-						var d = data.dailyViews[i];
-						dv += '<tr><td>' + anEsc(d.day) + '</td><td>' + d.cnt + '</td></tr>';
-					}
-					document.getElementById('anDailyViews').innerHTML = dv || '<tr><td colspan="2">no data yet</td></tr>';
-
-					var rf = '';
-					for (var i = 0; i < data.referrers.length; i++) {
-						var r = data.referrers[i];
-						rf += '<tr><td>' + anEsc(r.referrer) + '</td><td>' + r.cnt + '</td></tr>';
-					}
-					document.getElementById('anReferrers').innerHTML = rf || '<tr><td colspan="2">no data yet</td></tr>';
-
-					var vp = '';
-					for (var i = 0; i < data.viewports.length; i++) {
-						var v = data.viewports[i];
-						vp += '<tr><td>' + anEsc(v.viewport) + '</td><td>' + v.cnt + '</td></tr>';
-					}
-					document.getElementById('anViewports').innerHTML = vp || '<tr><td>no data</td></tr>';
-
-					var th = '';
-					for (var i = 0; i < data.themes.length; i++) {
-						var t = data.themes[i];
-						th += '<tr><td>' + anEsc(t.theme) + '</td><td>' + t.cnt + '</td></tr>';
-					}
-					document.getElementById('anThemes').innerHTML = th || '<tr><td>no data</td></tr>';
+					document.getElementById('anTopPages').innerHTML = tp || '<tr><td colspan="3">No data yet</td></tr>';
 
 					var tc = '';
-					for (var i = 0; i < data.topClicks.length; i++) {
-						var c = data.topClicks[i];
-						tc += '<tr><td>' + anEsc(c.path) + '</td><td>' + anEsc(c.tag) + '</td><td>' + anEsc(c.label) + '</td><td>' + c.cnt + '</td></tr>';
+					for (var k = 0; k < data.topClicks.length; k++) {
+						var c = data.topClicks[k];
+						tc += '<tr><td>' + anEsc(c.path) + '</td><td>' + anEsc(c.tag) + '</td><td>' + anEsc(c.label) + '</td><td class="num">' + c.cnt + '</td></tr>';
 					}
-					document.getElementById('anTopClicks').innerHTML = tc || '<tr><td colspan="4">no data yet</td></tr>';
+					document.getElementById('anTopClicks').innerHTML = tc || '<tr><td colspan="4">No data yet</td></tr>';
 				})
 				.catch(function (e) {
+					stamp.textContent = 'failed';
 					alert('Fail load analytics: ' + e.message);
 				});
 		}
