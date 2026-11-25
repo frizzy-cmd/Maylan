@@ -2,6 +2,17 @@
 
 var WHAT_CHANGED = [
 	{
+        version: "v2.0.5",
+        date: "November 26, 2026",
+        category: "Website",
+        title: "Minor Changes",
+        changes: [
+            "Maylan: Updated legal.html a bit",
+			"Maylan: Updated 404 fuzzy matching to support a new page"
+
+        ]
+    },
+	{
         version: "v2.0.4",
         date: "November 24, 2026",
         category: "Website",
