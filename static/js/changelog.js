@@ -2,18 +2,6 @@
 
 var WHAT_CHANGED = [
 	{
-        version: "v2.0.7",
-        date: "November 26, 2026",
-        category: "Website",
-        title: "Domain Change",
-        changes: [
-            "Maylan: Officially transitioning to a new domain: maylan.dpdns.org!",
-			"Maylan: All websites made by me, will start with [site].maylan.dpdns.org.",
-			"Maylan: Other existing sites, such as this site, maylan.teaa.workers.dev, will still work, However, it is recommended to use the new dpdns doamin."
-
-        ]
-    },
-	{
         version: "v2.0.6",
         date: "November 26, 2026",
         category: "Website",
@@ -266,6 +254,19 @@ var WHAT_CHANGED = [
 		]
 	}
 ];
+
+// {
+   //      version: "v2.0.7",
+   //      date: "November 26, 2026",
+   //      category: "Website",
+   //      title: "Domain Change",
+   //      changes: [
+   //          "Maylan: Officially transitioning to a new domain: maylan.dpdns.org!",
+			// "Maylan: All websites made by me, will start with [site].maylan.dpdns.org.",
+			// "Maylan: Other existing sites, such as this site, maylan.teaa.workers.dev, will still work, However, it is recommended to use the new dpdns doamin."
+
+   //      ]
+   //  },
 
 function escapeHtml(str) {
 	if (!str) return '';
