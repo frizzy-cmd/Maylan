@@ -1,130 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://maylan.dpdns.org/</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/p-settings-generate.html</loc>
-    <lastmod>2026-09-01</lastmod>
+    <loc>https://maylan.dpdns.org/textbox-generator</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://maylan.dpdns.org/p-settings-generate.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/calamus-toolkit.html</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://maylan.dpdns.org/calamus-toolkit.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/onepresence.html</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://maylan.dpdns.org/onepresence.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/cedric-reader.html</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://maylan.dpdns.org/cedric-reader.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/onemsg.html</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://maylan.dpdns.org/onemsg.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/audio-index.html</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://maylan.dpdns.org/audio-index.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/graphics-index.html</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://maylan.dpdns.org/graphics-index.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/twm-diagnostics.html</loc>
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://maylan.dpdns.org/twm-diagnostics.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/about-me.html</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://maylan.dpdns.org/magpie-collector.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/about-me-specs.html</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://maylan.teaa.workers.dev/magpie-collector.html</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://maylan.dpdns.org/ling-launcher.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/ling-launcher.html</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://maylan.dpdns.org/rue-studio.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/rue-studio.html</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://maylan.teaa.workers.dev/isthatagubby.html</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://maylan.teaa.workers.dev/changelog.html</loc>
-    <lastmod>2026-09-01</lastmod>
+    <loc>https://maylan.dpdns.org/changelog.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/settings.html</loc>
-    <lastmod>2026-09-01</lastmod>
+    <loc>https://maylan.dpdns.org/settings.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
-
   <url>
-    <loc>https://maylan.teaa.workers.dev/legal.html</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://maylan.dpdns.org/legal.html</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
-
 </urlset>
