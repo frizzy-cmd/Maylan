@@ -832,7 +832,7 @@ function blogShell(url, o) {
 	<meta property="og:image" content="${escHtml(img)}">
 	<meta name="twitter:card" content="${card}">
 
-	<link rel="icon" type="image/png" href="static/img/icon.png">
+	<link rel="icon" type="image/png" href="static/img/iconlight.png">
 	<link rel="stylesheet" href="static/styles.css">
 	<script src="static/js/theme-switcher.js"></script>
 	<script src="static/js/site-announcement.js" defer></script>
