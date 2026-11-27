@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="title" content="blog admin">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#5a207f">
+
+	<link rel="icon" type="image/png" href="static/img/icon.png">
+	<link rel="stylesheet" href="static/styles.css">
+	<script src="static/js/theme-switcher.js"></script>
+	<script src="static/js/blog-admin.js"></script>
+	<title>[Blog] Admin - Maylan's Homepage</title>
+
+	<style>
+		@media (min-width: 751px) {
+			#box { width: 860px; }
+		}
+
+		.admin-box {
+			background: rgba(18, 6, 28, 0.9);
+			border: 3px solid var(--box-border);
+			padding: 20px 24px;
+			border-radius: 6px;
+			margin-bottom: 20px;
+		}
+
+		.admin-box h3 {
+			margin: 0 0 14px 0;
+			font-size: 17pt;
+			text-align: left;
+		}
+
+		.admin-box label {
+			display: block;
+			margin: 14px 0 4px 0;
+			font-size: 12pt;
+		}
+
+		.admin-box label small { color: #a890b0; font-size: 10pt; }
+
+		.topline {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-bottom: 16px;
+			font-size: 12pt;
+			color: #a890b0;
+		}
+
+		.topline strong { color: var(--header-subtitle); font-weight: normal; }
+
+		#msg {
+			display: none;
+			margin: 0 0 16px 0;
+			padding: 8px 12px;
+			border: 2px solid var(--box-border);
+			font-size: 12pt;
+		}
+
+		#msg.bad { border-color: #ff5252; background: rgba(183, 28, 28, 0.25); }
+		#msg.good { border-color: #2e7d32; background: rgba(27, 94, 32, 0.25); }
+
+		.btn.sm {
+			display: inline-block;
+			width: auto;
+			margin: 0;
+			padding: 3px 14px;
+			font-size: 12pt;
+			border-bottom-width: 5px;
+		}
+
+		.btn.grey { background: #424242; border-color: #1b1b1b; }
+		.btn.red { background: #b71c1c; border-color: #5f0909; }
+
+		.btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
+		.badge {
+			display: inline-block;
+			padding: 0 8px;
+			font-size: 10pt;
+			border-radius: 3px;
+		}
+
+		.badge.pub { background: #1b5e20; color: #a5d6a7; border: 1px solid #2e7d32; }
+		.badge.draft { background: #424242; color: #ddd; border: 1px solid #666; }
+
+		.slugrow { display: flex; align-items: center; gap: 6px; font-size: 13pt; }
+		.slugrow span { color: #a890b0; white-space: nowrap; }
+
+		textarea#fBody, #box select#fStatus {
+			width: 100%;
+			box-sizing: border-box;
+			padding: 6px;
+			border: 0;
+			border-bottom: 2px solid var(--input-border);
+			color: #fff;
+			background: var(--input-bg);
+			box-shadow: 0px 0px 4px 2px var(--input-shadow);
+			font-family: Terminus, monospace;
+			font-size: 13pt;
+		}
+
+		#box select#fStatus { width: auto; min-width: 160px; }
+
+		textarea#fBody { resize: vertical; min-height: 280px; line-height: 1.4; }
+		textarea#fBody:focus { outline: none; border-bottom-color: var(--header-subtitle); }
+
+		details { margin-top: 10px; font-size: 11pt; color: #a890b0; }
+		details summary { cursor: pointer; }
+		details pre {
+			margin: 8px 0 0 0;
+			padding: 10px;
+			background: rgba(0, 0, 0, 0.35);
+			border: 1px solid var(--box-border);
+			color: #e0d0e0;
+			font-family: Terminus, monospace;
+			font-size: 11pt;
+			white-space: pre-wrap;
+		}
+
+		/* tables */
+		.dt {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 12pt;
+		}
+
+		.dt th {
+			padding: 4px 10px 4px 0;
+			border-bottom: 2px solid var(--box-border);
+			color: var(--header-subtitle);
+			font-weight: normal;
+			text-align: left;
+		}
+
+		#box .dt tbody td {
+			width: auto;
+			padding: 6px 10px 6px 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+			overflow-wrap: anywhere;
+		}
+
+		.dt .acts { white-space: nowrap; text-align: right; }
+		.dt .acts a { margin-left: 12px; cursor: pointer; }
+		.none { font-size: 12pt; color: #a890b0; }
+
+		/* preview, same look as a real post */
+		.post-body { font-size: 13pt; line-height: 1.6; color: #e0d0e0; overflow-wrap: anywhere; }
+		.post-body h1, .post-body h2, .post-body h3 {
+			margin: 24px 0 10px 0;
+			text-align: left;
+			text-shadow: none;
+			color: var(--header-subtitle);
+		}
+		.post-body h1 { font-size: 20pt; }
+		.post-body h2 { font-size: 17pt; }
+		.post-body h3 { font-size: 15pt; }
+		.post-body p { margin: 0 0 14px 0; }
+		.post-body img { max-width: 100%; height: auto; display: block; margin: 10px 0; }
+		.post-body small.sm { display: block; font-size: 10pt; color: #8a7a92; margin: 0 0 10px 0; }
+		.post-body ul { margin: 0 0 14px 0; padding-left: 22px; }
+		.post-body hr { border: 0; border-top: 2px solid var(--box-border); margin: 20px 0; }
+	</style>
+</head>
+
+<body>
+	<div id="header">
+		<a href="index.html" style="text-decoration: none;">
+			<img id="logo" src="static/img/logo.png" alt="OneShot Logo">
+		</a>
+		<div id="subtitle">blogAdmin</div>
+	</div>
+
+	<div id="box">
+		<div id="loginGate" class="admin-box" style="text-align: center;">
+			<h3 style="text-align: center;">Auth</h3>
+			<input type="password" id="blogKey" placeholder="your writer key" style="width: 100%; margin-bottom: 12px;">
+			<button class="btn" onclick="blogLogin()" style="width: 100% !important; margin: 0;">Login</button>
+			<div id="loginMsg" style="margin-top: 12px; font-size: 12pt; color: #ff8888;"></div>
+		</div>
+
+		<div id="app" style="display: none;">
+			<div class="topline">
+				<span>Signed in as <strong id="whoName"></strong><span id="whoTag"></span></span>
+				<span>
+					<a href="blog" target="_blank">View blog</a>&nbsp;&nbsp;
+					<button class="btn sm grey" onclick="blogLogout()">Logout</button>
+				</span>
+			</div>
+
+			<div id="msg"></div>
+
+			<!-- LIST -->
+			<div id="viewList">
+				<div class="admin-box">
+					<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+						<h3 style="margin: 0;">Posts</h3>
+						<button class="btn sm" onclick="newPost()">New post</button>
+					</div>
+					<table class="dt">
+						<thead>
+							<tr><th>Title</th><th>Link</th><th>Status</th><th>By</th><th>Updated</th><th></th></tr>
+						</thead>
+						<tbody id="postRows"></tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- EDITOR -->
+			<div id="viewEdit" style="display: none;">
+				<div class="admin-box">
+					<h3 id="editHead">New post</h3>
+
+					<label for="fTitle">Title</label>
+					<input type="text" id="fTitle" maxlength="120" placeholder="Former NVIDIA CEO Jensen Huang gets reinstated by the board!">
+
+					<label for="fSlug">Link</label>
+					<div class="slugrow"><span>/blog/</span><input type="text" id="fSlug" maxlength="80" placeholder="jensen-reinstated"></div>
+
+					<label for="fSum">Short summary for embeds <small>(optional, shows in discord etc.)</small> <small id="sumCount">0/200</small></label>
+					<input type="text" id="fSum" maxlength="200" placeholder="leave empty to use the start of the post">
+
+					<label for="fBody">Post</label>
+					<textarea id="fBody" rows="18"></textarea>
+
+					<details>
+						<summary>formatting cheat sheet</summary>
+<pre># Heading   (## and ### are smaller)
+**Bold**   *Italic*   __Underline__
+*__Underline italic__*   **__Bold underline__**   ***__All three__***
+[Link text](https://example.com)
+![Image](https://raw.githubusercontent.com/you/repo/main/pic.png)
+-# Small text (like a footer note)
+- bullet item
+---  (divider line)
+
+a new line in the same paragraph stays a new line, blank line starts a new paragraph</pre>
+					</details>
+
+					<label for="fStatus">Status</label>
+					<select id="fStatus">
+						<option value="draft">Draft (hidden)</option>
+						<option value="published">Published</option>
+					</select>
+
+					<div class="btnrow">
+						<button class="btn sm" onclick="savePost()">Save</button>
+						<button class="btn sm grey" onclick="previewPost()">Preview</button>
+						<button class="btn sm grey" onclick="backToList()">Back</button>
+						<button class="btn sm red" id="btnDelete" onclick="deleteCurrent()" style="display: none; margin-left: auto;">Delete</button>
+					</div>
+				</div>
+
+				<div class="admin-box" id="previewBox" style="display: none;">
+					<h3>Preview</h3>
+					<div class="post-body" id="previewBody"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
