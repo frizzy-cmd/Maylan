@@ -2,6 +2,7 @@
 
 var WHAT_CHANGED = [
 	{
+/* nrn
         version: "v2.0.7",
         date: "November 26, 2026",
         category: "Website",
@@ -13,6 +14,18 @@ var WHAT_CHANGED = [
 
         ]
     },
+*/
+		version: "v2.1.0",
+		date: "November 27, 2026",
+		category: "Website",
+		title: "Blog",
+		changes: [
+			"Maylan: Added a blog! Posts live at /blog, with search, markdown and per-post link embeds",
+			"Maylan: Added a Blog link to the homepage",
+			"OT1C, Longley: Contributed (thank you!)"
+		]
+	},
+
 	{
         version: "v2.0.6",
         date: "November 26, 2026",
