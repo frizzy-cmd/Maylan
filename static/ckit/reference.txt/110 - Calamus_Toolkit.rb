@@ -5,7 +5,7 @@
 # 1. Press R to open ModMenu.
 # 2. Use current ACTION keybind to select
 # 
-# - CalamusToolkit v0.5.5-GA
+# - CalamusToolkit v1.0.0
 # - Licensed under the GNU GPL v3 license.
 # - Last updated this section: 01/08/2026 10:43 PM UTC+8
 # 
@@ -31,9 +31,9 @@
 # Variable 90: Holds the menu choice for Linux/Mac forcesave safety warning (01: cancel 02: Proceed)
 # Variable 91: Stores the input option for diagnostics sub menu.
 # Veriable 92: Stores the target FPS input by player for Game Speed FPS.
-# Variable 93: Captures the raw numeric value the player wants to assign to a game variable with the Dev State Flip option
-# Variable 94: Holds the menu choice for the Dev State Flip type (determining whether the plr wants to toggle a switch which is 01, or variable which is 92.)
-# Variable 95: Tracks the specific switch ID or variable ID targeted for modification in the Dev State Flip routine
+# Variable 93: Captures the raw numeric value the player wants to assign to a game variable with the Switch Flip option
+# Variable 94: Holds the menu choice for the Switch Flip type (determining whether the plr wants to toggle a switch which is 01, or variable which is 92.)
+# Variable 95: Tracks the specific switch ID or variable ID targeted for modification in the Switch Flip routine
 # Variable 96: Holds the target Map ID when performing a Map ID jump
 # Variable 97: Stores the raw 7 to 8 digit coordinate string used to parse X and Y positions for Coord TP
 # Variable 98: Holds the menu for Coord TP behavior (determing wtheter the plr wants to enter new coord or jump to last coord)
@@ -45,27 +45,46 @@
 # - Thank you for using CalamusToolkit. 
 # ==============================================================================
 
-# START!
-
-# TO INSTALL THIS MOD, PLEASE REVIEW PROPER INSTALLATION GUIDES!
+# TO INSTALL THIS MOD, PLEASE REVIEW PROPER INSTALLATION GUIDES BELOW!
 #
 # =====++++ Links: ++++=====
 #
 # Codeberg: https://codeberg.org/kipkat/calamustoolkit
 # GitHub: https://github.com/frizzy-cmd
 # Personal website: https://maylan.teaa.workers.dev
-# Personal website [CalamusToolkit] https://maylan.teaa.workers.dev/calamus-toolkit
+# Personal website [CalamusToolkit:  https://maylan.teaa.workers.dev/calamus-toolkit
 # ModDB: https://www.moddb.com/games/oneshot/downloads/calamus-toolkit
-
+#
 # Discord: @maylan.html [User ID: 946316462182789130]
 # Email: support.kipsite@gmail.com
+
+
+# =====++++ SHA-256 Checksums: ++++=====
+#
+# 110 - Calamus_Toolkit.rb: 2FC54D0DC69114EFC5879A09C22EBB6E93DD02819232151A77215EB39B2BC3B8
+# xScripts.rxdata: 6CAE3F167D8F037975D727BC0D77A835E5FE86B15CF9F1FD04EFE5F96804680B
+# If these dont match, but it does run, then the SHA-256 checksums are just wrong. That's on me.
+# If these dont match, and doesnt run, then the xScripts.rxdata is corrupted. Try re-downloading again.
+# If these match, and run, you're all set.
+# If these match, and don't run, there must be a error. Contact support.kipsite@gmail.com! I'll be happy to help.
+#
+# =====++++ Checksums via Powershell Get-FileHash ++++=====
+# $PSVersionTable: [as of 11/28/2026 2:05 PM UTC+8]
+#
+# PSVersion                      5.1.19041.7844
+# PSEdition                      Desktop
+# PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+# BuildVersion                   10.0.19041.7844
+# CLRVersion                     4.0.30319.42000
+# WSManStackVersion              3.0
+# PSRemotingProtocolVersion      2.3
+# SerializationVersion           1.1.0.1
 
 #==============================================================================
 # ** Window_CalamusCoordInput
 #------------------------------------------------------------------------------
 #  This class handles the coordinate teleporting UI.
 #==============================================================================
-
 class Window_CalamusCoordInput < Window_Base
   attr_reader :confirmed
   attr_reader :cancelled
@@ -198,14 +217,290 @@ class Window_CalamusCoordInput < Window_Base
 end
 
 #==============================================================================
+# ** Window_CalamusMapSelect
+#------------------------------------------------------------------------------
+#  This class handles the map selecting UI.
+#==============================================================================
+class Window_CalamusMapSelect < Window_Command
+  attr_reader :selected_id
+  attr_reader :switch_to_manual
+  attr_reader :cancelled
+
+  def initialize
+    @map_entries = []
+    @switch_to_manual = false
+    @cancelled = false
+    @selected_id = nil
+
+    begin
+      infos = load_data("Data/MapInfos.rxdata")
+      infos.keys.sort.each do |id|
+        info = infos[id]
+        next unless info
+        label_name = info.name.to_s.strip.empty? ? "Map #{id}" : info.name.to_s
+        @map_entries.push([id, format("[%03d] %s", id, label_name)])
+      end
+    rescue
+      # this is fb if MapInfos is missing or just cant read it
+    end
+
+    cmds = ["[Switch to manual ID input]"]
+    if @map_entries.empty?
+      cmds.push("No maps found in Data/MapInfos.rxdata")
+    else
+      @map_entries.each { |_, lbl| cmds.push(lbl) }
+    end
+
+    super(480, cmds)
+    self.height = [cmds.size * 32 + 32, 384].min
+    self.x = (640 - self.width) / 2
+    self.y = (480 - self.height) / 2
+    self.z = 100001
+    self.index = 0
+  end
+
+  def update
+    super
+    cancel_key = defined?(Input::CANCEL) ? Input::CANCEL : Input::B
+    action_key = defined?(Input::ACTION) ? Input::ACTION : Input::C
+
+    if Input.trigger?(cancel_key)
+      $game_system.se_play($data_system.cancel_se) if $data_system
+      @cancelled = true
+      return
+    end
+
+    if Input.trigger?(action_key)
+      if self.index == 0
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @switch_to_manual = true
+        return
+      end
+
+      entry = @map_entries[self.index - 1]
+      if entry
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @selected_id = entry[0]
+      end
+    end
+  end
+end
+
+#==============================================================================
+# ** Window_CalamusFlagSelect
+#------------------------------------------------------------------------------
+#  This class handles the Switch Flip selecting UI.
+#==============================================================================
+class Window_CalamusFlagSelect < Window_Command
+  attr_reader :chosen_kind
+  attr_reader :chosen_id
+  attr_reader :switch_to_manual
+  attr_reader :cancelled
+
+  def initialize
+    @entries = []
+    @chosen_kind = nil
+    @chosen_id = nil
+    @switch_to_manual = false
+    @cancelled = false
+
+    sw_names = ($data_system && $data_system.switches) ? $data_system.switches : []
+    (1...sw_names.size).each do |id|
+      raw = sw_names[id].to_s.strip
+      nm = raw.empty? ? "Switch #{id}" : raw
+      st = ($game_switches && $game_switches[id]) ? "ON" : "OFF"
+      @entries.push([:switch, id, format("[SW %03d] %s (%s)", id, nm, st)])
+    end
+
+    var_names = ($data_system && $data_system.variables) ? $data_system.variables : []
+    (1...var_names.size).each do |id|
+      raw = var_names[id].to_s.strip
+      nm = raw.empty? ? "Var #{id}" : raw
+      val = $game_variables ? $game_variables[id] : 0
+      # we keep it compact so supa long names dont clip
+      @entries.push([:var, id, format("[VR %03d] %s = %s", id, nm, val.inspect)])
+    end
+
+    cmds = ["[Switch to manual ID input]"]
+    if @entries.empty?
+      cmds.push("No switches or variables found")
+    else
+      @entries.each { |_, _, lbl| cmds.push(lbl) }
+    end
+
+    super(500, cmds)
+    self.height = [cmds.size * 32 + 32, 384].min
+    self.x = (640 - self.width) / 2
+    self.y = (480 - self.height) / 2
+    self.z = 100001
+    self.index = 0
+  end
+
+  def update
+    super
+    cancel_key = defined?(Input::CANCEL) ? Input::CANCEL : Input::B
+    action_key = defined?(Input::ACTION) ? Input::ACTION : Input::C
+
+    if Input.trigger?(cancel_key)
+      $game_system.se_play($data_system.cancel_se) if $data_system
+      @cancelled = true
+      return
+    end
+
+    if Input.trigger?(action_key)
+      if self.index == 0
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @switch_to_manual = true
+        return
+      end
+
+      item = @entries[self.index - 1]
+      if item
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @chosen_kind = item[0]
+        @chosen_id = item[1]
+      end
+    end
+  end
+end
+
+#==============================================================================
+# ** Window_CalamusItemSelect
+#------------------------------------------------------------------------------
+#  This class handles the item selecting UI.
+#==============================================================================
+class Window_CalamusItemSelect < Window_Command
+  attr_reader :selected_item
+  attr_reader :switch_to_manual
+  attr_reader :cancelled
+
+  def initialize(mode = :give)
+    @mode = mode
+    @entries = []
+    @selected_item = nil
+    @switch_to_manual = false
+    @cancelled = false
+
+    if $data_items
+      (1...$data_items.size).each do |id|
+        it = $data_items[id]
+        next unless it
+        nm = it.name.to_s.strip
+        next if nm.empty?
+        cnt = $game_party ? $game_party.item_number(it.id) : 0
+        @entries.push([it, format("[%02d] %s (x%d)", it.id, nm, cnt)])
+      end
+    end
+
+    cmds = ["[Switch to manual ID input]"]
+    if @entries.empty?
+      cmds.push("No items found in $data_items")
+    else
+      @entries.each { |_, lbl| cmds.push(lbl) }
+    end
+
+    super(480, cmds)
+    self.height = [cmds.size * 32 + 32, 384].min
+    self.x = (640 - self.width) / 2
+    self.y = (480 - self.height) / 2
+    self.z = 100001
+    self.index = 0
+  end
+
+  def update
+    super
+    cancel_key = defined?(Input::CANCEL) ? Input::CANCEL : Input::B
+    action_key = defined?(Input::ACTION) ? Input::ACTION : Input::C
+
+    if Input.trigger?(cancel_key)
+      $game_system.se_play($data_system.cancel_se) if $data_system
+      @cancelled = true
+      return
+    end
+
+    if Input.trigger?(action_key)
+      if self.index == 0
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @switch_to_manual = true
+        return
+      end
+
+      row = @entries[self.index - 1]
+      if row
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @selected_item = row[0]
+      end
+    end
+  end
+end
+
+#==============================================================================
+# ** Window_CalamusBgmSelect
+#------------------------------------------------------------------------------
+#  This class handles the coordinate teleporting UI.
+#==============================================================================
+class Window_CalamusBgmSelect < Window_Command
+  attr_reader :chosen_track
+  attr_reader :switch_to_manual
+  attr_reader :cancelled
+
+  def initialize
+    @tracks = ($bgm_list || [])
+    @chosen_track = nil
+    @switch_to_manual = false
+    @cancelled = false
+
+    cmds = ["[Switch to manual index input]"]
+    if @tracks.empty?
+      cmds.push("No BGM tracks found in Audio/BGM")
+    else
+      @tracks.each_with_index do |trk, idx|
+        cmds.push(format("[%03d] %s", idx, trk))
+      end
+    end
+
+    super(480, cmds)
+    self.height = [cmds.size * 32 + 32, 384].min
+    self.x = (640 - self.width) / 2
+    self.y = (480 - self.height) / 2
+    self.z = 100001
+    self.index = 0
+  end
+
+  def update
+    super
+    cancel_key = defined?(Input::CANCEL) ? Input::CANCEL : Input::B
+    action_key = defined?(Input::ACTION) ? Input::ACTION : Input::C
+
+    if Input.trigger?(cancel_key)
+      $game_system.se_play($data_system.cancel_se) if $data_system
+      @cancelled = true
+      return
+    end
+
+    if Input.trigger?(action_key)
+      if self.index == 0
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @switch_to_manual = true
+        return
+      end
+
+      trk = @tracks[self.index - 1]
+      if trk
+        $game_system.se_play($data_system.decision_se) if $data_system
+        @chosen_track = trk
+      end
+    end
+  end
+end
+
+#==============================================================================
 # ** ToolGiver_Menu
 #------------------------------------------------------------------------------
 #  This class handles core mod menu functionality. Was named ToolGiver_Menu, since it was originally was only a tool giver mod :D
 #==============================================================================
-
 class ToolGiver_Menu < Window_Selectable
   attr_reader :commands
-
 
   #==============================================================================
   # * initialize: All modifications.
@@ -217,7 +512,7 @@ class ToolGiver_Menu < Window_Selectable
       "Coord TP",
       "Map ID Jump",
       "Refresh Map",
-      "Dev State Flip",
+      "Switch Flip",
       "Force Save", 
       "Walk Anywhere",
       "Game Speed FPS",
@@ -239,11 +534,10 @@ class ToolGiver_Menu < Window_Selectable
     else
       os_str = "IDontKnowWhatOS" # unknown OS
     end
-    @header_text = "CalamusToolkit v0.5.5-GA [#{os_str}]"
+    @header_text = "CalamusToolkit v1.0.0 [#{os_str}]"
     # if upd version, make sure to go to @idr_text.bitmap.draw_text aswell to upd text for diagnostics !!
     # also at $INJECTOR_VERSION aswell
     
-    # in motherland russia, we dont use ui, we build ui
     item_count = @commands.size
     column_count = 2
     width = 460
@@ -333,7 +627,6 @@ end
 #------------------------------------------------------------------------------
 #  This class handles (almost) all dialogue boxes for information, errors, etc.
 #==============================================================================
-
 class Scene_Map
   alias_method :orig_update, :update
   
@@ -351,13 +644,19 @@ class Scene_Map
         
         case @tool_menu.index
         when 0 # custom item id giver
-          $game_temp.num_input_variable_id = 99
-          $game_temp.num_input_digits_max = 2
-          $game_temp.message_text = "Enter preferred Item ID please! (01-82)"
-          $game_temp.message_window_showing = true
-          $pending_item_id = true
           @tool_menu.dispose
           @tool_menu = nil
+          @calamus_item_mode = :give
+          @calamus_item_win = Window_CalamusItemSelect.new(:give)
+
+          # 0.5.5-GA code
+          # $game_temp.num_input_variable_id = 99
+          # $game_temp.num_input_digits_max = 2
+          # $game_temp.message_text = "Enter preferred Item ID please! (01-82)"
+          # $game_temp.message_window_showing = true
+          # $pending_item_id = true
+          # @tool_menu.dispose
+          # @tool_menu = nil
         when 1 # update checker
           upd_run(true)
           @tool_menu.dispose
@@ -370,27 +669,27 @@ class Scene_Map
           @tool_menu.dispose
           @tool_menu = nil
         when 3 # map id jump
-          $game_temp.num_input_variable_id = 96
-          $game_temp.num_input_digits_max = 3
-          $game_temp.message_face = "calamus_smile"
-          $game_temp.message_text = "Enter Map ID to teleport to (001-263):"
-          $game_temp.message_window_showing = true
-          $pending_map_jump = true
           @tool_menu.dispose
           @tool_menu = nil
+          @calamus_map_win = Window_CalamusMapSelect.new # the class btw
         when 4 # map refresh
           force_map_refresh
           @tool_menu.dispose
           @tool_menu = nil
         when 5 # dev flip
-          $game_temp.num_input_variable_id = 95
-          $game_temp.num_input_digits_max = 3
-          $game_temp.message_face = "calamus_speak" 
-          $game_temp.message_text = "Enter target switch or Variable ID (001-999):"
-          $game_temp.message_window_showing = true
-          $pending_state_target = true
           @tool_menu.dispose
           @tool_menu = nil
+          @calamus_flag_win = Window_CalamusFlagSelect.new
+
+          # VVVVVVVVV Old code from 0.5.5-GA
+          # $game_temp.num_input_variable_id = 95
+          # $game_temp.num_input_digits_max = 3
+          # $game_temp.message_face = "calamus_speak" 
+          # $game_temp.message_text = "Enter target switch or Variable ID (001-999):"
+          # $game_temp.message_window_showing = true
+          # $pending_state_target = true
+          # @tool_menu.dispose
+          # @tool_menu = nil
         when 6 # forcesave
           # if plat =~ /linux|darwin/ | Throws undefined local variable or method 'plat' | FUCK YOU!!!!! | sometimes i forget this i ruby 1.8.1, or 1.8.9? IDFK
           current_plat = RUBY_PLATFORM.downcase
@@ -437,13 +736,10 @@ class Scene_Map
           @tool_menu.dispose
           @tool_menu = nil
         when 10 # item id delete
-          $game_temp.num_input_variable_id = 89
-          $game_temp.num_input_digits_max = 2
-          $game_temp.message_text = "Enter target Item ID to banish from inventory:"
-          $game_temp.message_window_showing = true
-          $pending_del_item = true
           @tool_menu.dispose
           @tool_menu = nil
+          @calamus_item_mode = :delete
+          @calamus_item_win = Window_CalamusItemSelect.new(:delete)
         when 11 # handle mute/unmute bgm
           $calamus_is_muted ||= false
           if !$calamus_is_muted
@@ -473,19 +769,26 @@ class Scene_Map
           @tool_menu.dispose
           @tool_menu = nil
         when 12 # BGM Jukebox
-          if $bgm_list.empty?
-            $game_temp.message_face = "calamus_shock"
-            $game_temp.message_text = "No BGM files found in Audio/BGM? \\p.. Are there any sound files there?" # if user deleted everything in audio/bgm
-          else
-            $game_temp.num_input_variable_id = 88
-            $game_temp.num_input_digits_max = 3
-            max_index = $bgm_list.size - 1
-            $game_temp.message_text = "Enter BGM index (000 - #{sprintf('%03d', max_index)}):\nCheck the Codeberg repo or your OneShot game directory for the list!"
-            $pending_bgm_play = true
-          end
-          $game_temp.message_window_showing = true
           @tool_menu.dispose
           @tool_menu = nil
+          if $bgm_list.nil? || $bgm_list.empty?
+            $game_temp.message_face = "calamus_shock"
+            $game_temp.message_text = "No BGM files found in Audio/BGM? \\p.. Are there any sound files there?"
+            $game_temp.message_window_showing = true
+          else
+            @calamus_bgm_win = Window_CalamusBgmSelect.new
+          end
+          #0.5.5 code
+          # if $bgm_list.empty?
+          #   $game_temp.message_face = "calamus_shock"
+          #   $game_temp.message_text = "No BGM files found in Audio/BGM? \\p.. Are there any sound files there?" # if user deleted everything in audio/bgm
+          # else
+          #   $game_temp.num_input_variable_id = 88
+          #   $game_temp.num_input_digits_max = 3
+          #   max_index = $bgm_list.size - 1
+          #   $game_temp.message_text = "Enter BGM index (000 - #{sprintf('%03d', max_index)}):\nCheck the Codeberg repo or your OneShot game directory for the list!"
+          #   $pending_bgm_play = true
+          # end
         when 13 # about 
           @tool_menu.dispose
           @tool_menu = nil
@@ -698,10 +1001,160 @@ class Scene_Map
       $game_temp.message_window_showing = true
     end
     
-    if Input.trigger?(Input::R) && @tool_menu.nil? && @coord_window.nil?
+    if Input.trigger?(Input::R) && @tool_menu.nil? && @coord_window.nil? && @calamus_map_win.nil? && @calamus_item_win.nil? && @calamus_flag_win.nil? && @calamus_bgm_win.nil?
       $game_system.se_play($data_system.decision_se)
       @tool_menu = ToolGiver_Menu.new
     end
+
+    # map id tp
+    if @calamus_map_win
+        @calamus_map_win.update
+        if @calamus_map_win.cancelled
+          @calamus_map_win.dispose
+          @calamus_map_win = nil
+        elsif @calamus_map_win.switch_to_manual
+          @calamus_map_win.dispose
+          @calamus_map_win = nil
+          $game_temp.num_input_variable_id = 96
+          $game_temp.num_input_digits_max = 3
+          $game_temp.message_face = "calamus_smile"
+          $game_temp.message_text = "Enter Map ID to teleport to (001-263):"
+          $game_temp.message_window_showing = true
+          $pending_map_jump = true
+        elsif @calamus_map_win.selected_id
+          chosen_id = @calamus_map_win.selected_id
+          @calamus_map_win.dispose
+          @calamus_map_win = nil
+          execute_map_jump(chosen_id)
+        end
+        return
+      end
+
+      # switch flip
+      if @calamus_flag_win
+        @calamus_flag_win.update
+        if @calamus_flag_win.cancelled
+          @calamus_flag_win.dispose
+          @calamus_flag_win = nil
+        elsif @calamus_flag_win.switch_to_manual
+          @calamus_flag_win.dispose
+          @calamus_flag_win = nil
+          $game_temp.num_input_variable_id = 95
+          $game_temp.num_input_digits_max = 3
+          $game_temp.message_face = "calamus_speak"
+          $game_temp.message_text = "Enter target switch or Variable ID (001-999):"
+          $game_temp.message_window_showing = true
+          $pending_state_target = true
+        elsif @calamus_flag_win.chosen_kind
+          kind = @calamus_flag_win.chosen_kind
+          fid = @calamus_flag_win.chosen_id
+          @calamus_flag_win.dispose
+          @calamus_flag_win = nil
+
+          if kind == :switch
+            cur = $game_switches[fid]
+            $game_switches[fid] = !cur
+            $game_map.need_refresh = true if $game_map
+            $game_temp.message_face = "calamus_smile2"
+            $game_temp.message_text = "Switch #{fid} flipped from #{cur} to #{!cur}!"
+            $game_temp.message_window_showing = true
+          elsif kind == :var
+            # reuse existing var 93 input flow for setting value
+            $target_state_id = fid
+            $game_temp.num_input_variable_id = 93
+            $game_temp.num_input_digits_max = 4
+            $game_temp.message_face = "calamus_speak"
+            $game_temp.message_text = "Enter value to set for Variable #{fid}:"
+            $game_temp.message_window_showing = true
+            $pending_variable_val = true
+          end
+        end
+        return
+      end
+
+      # item select ui
+      if @calamus_item_win
+        @calamus_item_win.update
+        if @calamus_item_win.cancelled
+          @calamus_item_win.dispose
+          @calamus_item_win = nil
+          @calamus_item_mode = nil
+        elsif @calamus_item_win.switch_to_manual
+          mode = @calamus_item_mode || :give
+          @calamus_item_win.dispose
+          @calamus_item_win = nil
+          @calamus_item_mode = nil
+
+          if mode == :delete
+            $game_temp.num_input_variable_id = 89
+            $game_temp.num_input_digits_max = 2
+            $game_temp.message_text = "Enter target Item ID to banish from inventory:"
+            $game_temp.message_window_showing = true
+            $pending_del_item = true
+          else
+            $game_temp.num_input_variable_id = 99
+            $game_temp.num_input_digits_max = 2
+            $game_temp.message_text = "Enter preferred Item ID please! (01-82)"
+            $game_temp.message_window_showing = true
+            $pending_item_id = true
+          end
+        elsif @calamus_item_win.selected_item
+          picked = @calamus_item_win.selected_item
+          mode = @calamus_item_mode || :give
+          @calamus_item_win.dispose
+          @calamus_item_win = nil
+          @calamus_item_mode = nil
+
+          if mode == :delete
+            # we'll actually delete if the player has one of what the plr selected.
+            # if not then just say nothing lmao
+            if $game_party && $game_party.item_number(picked.id) > 0
+              $game_party.lose_item(picked.id, 99)
+              $game_temp.message_face = "calamus"
+              $game_temp.message_text = "Removed #{picked.name} from inventory."
+              $game_temp.message_window_showing = true
+            end
+          else
+            $game_party.gain_item(picked.id, 1) if $game_party
+            $game_temp.message_face = "calamus_smile"
+            $game_temp.message_text = "Gave 1x #{picked.name}!"
+            $game_temp.message_window_showing = true
+          end
+        end
+        return
+      end
+      
+      # bgm select ui
+      if @calamus_bgm_win
+        @calamus_bgm_win.update
+        if @calamus_bgm_win.cancelled
+          @calamus_bgm_win.dispose
+          @calamus_bgm_win = nil
+        elsif @calamus_bgm_win.switch_to_manual
+          @calamus_bgm_win.dispose
+          @calamus_bgm_win = nil
+          $game_temp.num_input_variable_id = 88
+          $game_temp.num_input_digits_max = 3
+          max_index = $bgm_list.size - 1
+          $game_temp.message_face = "calamus_smile"
+          $game_temp.message_text = "Enter BGM index (000 - #{sprintf('%03d', max_index)}):\nCheck the Codeberg repo or your OneShot game directory for the list!"
+          $game_temp.message_window_showing = true
+          $pending_bgm_play = true
+        elsif @calamus_bgm_win.chosen_track
+          trk = @calamus_bgm_win.chosen_track
+          @calamus_bgm_win.dispose
+          @calamus_bgm_win = nil
+
+          # clr mute since user man picked track
+          $game_system.bgm_play(RPG::AudioFile.new(trk, 100, 100)) if $game_system
+          $calamus_is_muted = false
+          $calamus_muted_bgm = nil
+          $game_temp.message_face = "calamus_smile"
+          $game_temp.message_text = "Now playing track: #{trk} !"
+          $game_temp.message_window_showing = true
+        end
+        return
+      end
 
     # custom overlay
     if @coord_window
@@ -738,7 +1191,7 @@ end
 #==============================================================================
 # * upd_check: Checks for updates.
 #==============================================================================
-$INJECTOR_VERSION = "v0.5.5-GA"
+$INJECTOR_VERSION = "v1.0.0"
 
 def upd_check
   tmp = "calamus_upd.tmp"
@@ -897,17 +1350,88 @@ def teleport_to_backup
 end
 
 #==============================================================================
+# * find_safe_map_tile: Finds a safe walkable tile, instead of teleporting to X:15 Y:15 by default.
+#==============================================================================
+def find_safe_map_tile(map_id)
+  fallback_x = 15
+  fallback_y = 15
+  return [fallback_x, fallback_y] unless $game_map
+
+  w = $game_map.width
+  h = $game_map.height
+  cx = [[w / 2, 0].max, w - 1].min
+  cy = [[h / 2, 0].max, h - 1].min
+
+  # we check center first then go outter
+  return [cx, cy] if $game_map.passable?(cx, cy, 0)
+
+  max_r = [w, h].max
+  (1..max_r).each do |r|
+    (-r..r).each do |dx|
+      (-r..r).each do |dy|
+        nx = cx + dx
+        ny = cy + dy
+        next if nx < 0 || ny < 0 || nx >= w || ny >= h
+        return [nx, ny] if $game_map.passable?(nx, ny, 0)
+      end
+    end
+  end
+
+  [fallback_x, fallback_y]
+rescue
+  [15, 15]
+end
+
+def sync_map_bgm(map_id)
+  return unless $game_system
+  map_obj = load_data(format("Data/Map%03d.rxdata", map_id)) rescue nil
+  return unless map_obj
+
+  if map_obj.autoplay_bgm && map_obj.bgm
+    if map_obj.bgm.name && !map_obj.bgm.name.empty?
+      $game_system.bgm_play(map_obj.bgm)
+      $calamus_is_muted = false
+      $calamus_muted_bgm = nil
+    end
+  end
+rescue
+end
+
+#==============================================================================
 # * execute_map_jump: Handles map ID teleporting.
 #==============================================================================
-def execute_map_jump(map_id) 
+def execute_map_jump(map_id)
+  # load sel map qickly so passable? checks walkable stuff on that map
+  orig_id = $game_map ? $game_map.map_id : nil
+  orig_x = $game_player ? $game_player.x : 15
+  orig_y = $game_player ? $game_player.y : 15
+
+  tx = 15
+  ty = 15
+  begin
+    $game_map.setup(map_id)
+    tx, ty = find_safe_map_tile(map_id)
+  rescue
+    tx = 15
+    ty = 15
+  ensure
+    if orig_id && orig_id != map_id
+      $game_map.setup(orig_id) rescue nil
+      $game_player.moveto(orig_x, orig_y) if $game_player
+    end
+  end
+
   $game_temp.player_transferring = true
   $game_temp.player_new_map_id = map_id
-  $game_temp.player_new_x = 15
-  $game_temp.player_new_y = 15
+  $game_temp.player_new_x = tx
+  $game_temp.player_new_y = ty
   $game_temp.player_new_direction = 2
-  
+
+  # play target map's bgm right away on jump
+  sync_map_bgm(map_id)
+
   $game_temp.message_face = "calamus_smile"
-  $game_temp.message_text = "Jumping to Map ID #{map_id}! Spawning at X:15, Y:15 by default."
+  $game_temp.message_text = "Jumping to Map ID #{map_id}! Spawning at X:#{tx}, Y:#{ty}."
   $game_temp.message_window_showing = true
 end
 
@@ -1061,7 +1585,7 @@ class Debug_Coord_Display
     when 2 then "Extended Visuals"
     when 3 then "Event Inspector"
     end
-    @idr_text.bitmap.draw_text(0, 0, 600, 32, "CalamusToolkit v0.5.5-GA | Diagnostics [#{label_suffix}]")
+    @idr_text.bitmap.draw_text(0, 0, 600, 32, "CalamusToolkit v1.0.0 | Diagnostics [#{label_suffix}]")
 
     @pass_cache = {}
     @cached_map_id = nil
@@ -1301,4 +1825,4 @@ end
 # probably wont work because i dont know how the fuck oneshot titles it windows i tried to find it but to no avail
 # ^old comment
 
-# Celebrating 1304 lines of code!
+# Celebrating 1828 lines of code!

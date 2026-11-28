@@ -1,20 +1,19 @@
 // changelog.js
 
 var WHAT_CHANGED = [
+		{
+		version: "v1.0.0",
+		date: "November 28, 2026",
+		category: "Project",
+		title: "Calamus Toolkit update",
+		changes: [
+			"Updated to v1.0.0",
+			"UI-friendly Map ID Jump, Switch Flip (formerly Dev State Flip), and BGM Jukebox!",
+			"Jumping to a map does not TP you to X:15 Y:15 by default now, instead, it finds the nearest walkable tile, and TPs you there. If none are found, you get TPed to X:15 Y:15 anyway.",
+			"Additional improvements"
+		]
+	},
 	{
-/* nrn
-        version: "v2.0.7",
-        date: "November 26, 2026",
-        category: "Website",
-        title: "Domain Change",
-        changes: [
-            "Maylan: Officially transitioning to a new domain: maylan.dpdns.org!",
-			"Maylan: All websites made by me, will start with [site].maylan.dpdns.org.",
-			"Maylan: Other existing sites, such as this site, maylan.teaa.workers.dev, will still work, However, it is recommended to use the new dpdns doamin."
-
-        ]
-    },
-*/
 		version: "v2.1.0",
 		date: "November 27, 2026",
 		category: "Website",
